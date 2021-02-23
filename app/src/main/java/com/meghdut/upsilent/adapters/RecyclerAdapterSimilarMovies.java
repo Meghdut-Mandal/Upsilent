@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 19/02/17.
+ * Created by Meghdut Mandal on 19/02/17.
  */
 
 public class RecyclerAdapterSimilarMovies extends RecyclerView.Adapter<RecyclerAdapterSimilarMovies.ViewHolder> {

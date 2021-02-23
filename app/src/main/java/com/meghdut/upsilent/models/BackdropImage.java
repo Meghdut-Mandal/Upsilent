@@ -3,7 +3,7 @@ package com.meghdut.upsilent.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by KeshavAggarwal on 20/01/17.
+ * Created by Meghdut Mandal on 20/01/17.
  */
 
 public class BackdropImage {

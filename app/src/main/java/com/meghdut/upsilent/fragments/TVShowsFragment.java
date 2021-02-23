@@ -25,7 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by KeshavAggarwal on 07/02/17.
+ * Created by Meghdut Mandal on 07/02/17.
  */
 
 public class TVShowsFragment extends Fragment {

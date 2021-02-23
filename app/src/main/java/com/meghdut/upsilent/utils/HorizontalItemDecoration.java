@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by Keshav Aggarwal on 01/02/20.
+ * Created by Meghdut Mandal on 01/02/20.
  */
 public class HorizontalItemDecoration extends RecyclerView.ItemDecoration {
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by Keshav Aggarwal on 01/02/20.
+ * Created by Meghdut Mandal on 01/02/20.
  */
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 

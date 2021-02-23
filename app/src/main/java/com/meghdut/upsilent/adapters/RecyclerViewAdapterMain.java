@@ -24,7 +24,7 @@ import com.meghdut.upsilent.SeeAllMoviesActivity;
 import com.meghdut.upsilent.network.MovieResponse;
 
 /**
- * Created by KeshavAggarwal on 07/01/17.
+ * Created by Meghdut Mandal on 07/01/17.
  */
 
 public class RecyclerViewAdapterMain extends RecyclerView.Adapter<RecyclerViewAdapterMain.ViewHolder> implements OnRecyclerViewItemClickListener {

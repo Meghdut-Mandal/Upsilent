@@ -23,7 +23,7 @@ import com.meghdut.upsilent.utils.HorizontalItemDecoration;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 09/02/17.
+ * Created by Meghdut Mandal on 09/02/17.
  */
 
 public class InfoAboutTVShowFragment extends Fragment {

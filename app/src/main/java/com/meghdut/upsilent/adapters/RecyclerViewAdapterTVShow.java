@@ -24,7 +24,7 @@ import com.meghdut.upsilent.SeeAllTVShowsActivity;
 import com.meghdut.upsilent.network.TVShowResponse;
 
 /**
- * Created by KeshavAggarwal on 09/02/17.
+ * Created by Meghdut Mandal on 09/02/17.
  */
 
 public class RecyclerViewAdapterTVShow extends RecyclerView.Adapter<RecyclerViewAdapterTVShow.ViewHolder> implements OnRecyclerViewItemClickListener {

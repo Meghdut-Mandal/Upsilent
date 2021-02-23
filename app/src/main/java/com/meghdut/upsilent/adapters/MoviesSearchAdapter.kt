@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.search_movie_list_item.view.*
 import java.util.ArrayList
 
 /**
- * Created by KeshavAggarwal on 30/03/17.
+ * Created by Meghdut Mandal on 30/03/17.
  */
 
 class MoviesSearchAdapter(private val mSearchedMovies: ArrayList<Movie>, internal var mContext: Context) : RecyclerView.Adapter<MoviesSearchAdapter.ViewHolder>() {

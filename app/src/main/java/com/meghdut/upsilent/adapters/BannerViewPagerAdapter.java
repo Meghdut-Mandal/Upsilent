@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by KeshavAggarwal on 19/01/17.
+ * Created by Meghdut Mandal on 19/01/17.
  */
 
 public class BannerViewPagerAdapter extends PagerAdapter {

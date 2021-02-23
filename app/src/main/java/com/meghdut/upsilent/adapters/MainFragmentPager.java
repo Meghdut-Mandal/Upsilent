@@ -8,7 +8,7 @@ import com.meghdut.upsilent.fragments.MoviesFragment;
 import com.meghdut.upsilent.fragments.TVShowsFragment;
 
 /**
- * Created by KeshavAggarwal on 06/02/17.
+ * Created by Meghdut Mandal on 06/02/17.
  */
 
 public class MainFragmentPager extends FragmentPagerAdapter {

@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.horizontal_cardview_movies.view.*
 import java.util.ArrayList
 
 /**
- * Created by KeshavAggarwal on 06/01/17.
+ * Created by Meghdut Mandal on 06/01/17.
  */
 
 class RecyclerViewAdapter(private val mMovies: ArrayList<Movie>?, internal var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {

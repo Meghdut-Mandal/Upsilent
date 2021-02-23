@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by KeshavAggarwal on 08/02/17.
+ * Created by Meghdut Mandal on 08/02/17.
  */
 
 public class TVShow implements Serializable{

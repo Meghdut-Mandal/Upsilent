@@ -1,7 +1,7 @@
 package com.meghdut.upsilent.network;
 
 /**
- * Created by KeshavAggarwal on 12/01/17.
+ * Created by Meghdut Mandal on 12/01/17.
  */
 
 public class URLConstants {

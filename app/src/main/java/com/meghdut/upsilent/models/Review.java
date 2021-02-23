@@ -3,7 +3,7 @@ package com.meghdut.upsilent.models;
 import java.io.Serializable;
 
 /**
- * Created by KeshavAggarwal on 14/03/17.
+ * Created by Meghdut Mandal on 14/03/17.
  */
 
 public class Review implements Serializable {

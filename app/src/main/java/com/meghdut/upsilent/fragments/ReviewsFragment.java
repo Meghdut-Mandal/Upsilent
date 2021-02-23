@@ -21,7 +21,7 @@ import com.meghdut.upsilent.adapters.RecyclerViewAdapterReviews;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 14/03/17.
+ * Created by Meghdut Mandal on 14/03/17.
  */
 
 public class ReviewsFragment extends Fragment {

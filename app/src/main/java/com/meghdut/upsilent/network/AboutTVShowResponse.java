@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 09/02/17.
+ * Created by Meghdut Mandal on 09/02/17.
  */
 
 public class AboutTVShowResponse {

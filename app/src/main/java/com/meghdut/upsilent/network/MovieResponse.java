@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 12/01/17.
+ * Created by Meghdut Mandal on 12/01/17.
  */
 
 public class MovieResponse implements Serializable {

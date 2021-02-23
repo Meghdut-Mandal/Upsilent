@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.tvshow_cast_list_item_view.view.*
 import java.util.*
 
 /**
- * Created by KeshavAggarwal on 13/03/17.
+ * Created by Meghdut Mandal on 13/03/17.
  */
 
 class RecyclerViewAdapterTVShowCast(private val mTvShowCast: ArrayList<Cast>?, internal var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterTVShowCast.ViewHolder>() {

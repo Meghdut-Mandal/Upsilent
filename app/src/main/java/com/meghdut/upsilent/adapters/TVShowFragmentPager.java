@@ -10,7 +10,7 @@ import com.meghdut.upsilent.fragments.InfoAboutTVShowFragment;
 import java.util.HashMap;
 
 /**
- * Created by KeshavAggarwal on 09/02/17.
+ * Created by Meghdut Mandal on 09/02/17.
  */
 
 public class TVShowFragmentPager extends FragmentPagerAdapter {

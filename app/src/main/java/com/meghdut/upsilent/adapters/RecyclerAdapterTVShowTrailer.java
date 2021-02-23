@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by KeshavAggarwal on 03/03/17.
+ * Created by Meghdut Mandal on 03/03/17.
  */
 
 public class RecyclerAdapterTVShowTrailer extends RecyclerView.Adapter<RecyclerAdapterTVShowTrailer.ViewHolder> {

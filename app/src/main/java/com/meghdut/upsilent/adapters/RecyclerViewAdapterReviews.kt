@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.review_list_item_view.view.*
 import java.util.ArrayList
 
 /**
- * Created by KeshavAggarwal on 14/03/17.
+ * Created by Meghdut Mandal on 14/03/17.
  */
 
 class RecyclerViewAdapterReviews(private val mReviews: ArrayList<Review>, internal var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterReviews.ViewHolder>() {

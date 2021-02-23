@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.movie_cast_list_item_view.view.*
 import java.util.ArrayList
 
 /**
- * Created by KeshavAggarwal on 10/02/17.
+ * Created by Meghdut Mandal on 10/02/17.
  */
 
 class RecyclerViewAdapterMovieCast(private val mMovieCast: ArrayList<Cast>?, internal var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterMovieCast.ViewHolder>() {

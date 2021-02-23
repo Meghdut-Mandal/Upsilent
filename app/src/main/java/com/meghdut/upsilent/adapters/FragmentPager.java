@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 
 /**
- * Created by KeshavAggarwal on 25/01/17.
+ * Created by Meghdut Mandal on 25/01/17.
  */
 
 public class FragmentPager extends FragmentPagerAdapter {

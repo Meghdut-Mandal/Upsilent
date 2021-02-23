@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.see_all_recyclerview_item.view.*
 import java.util.ArrayList
 
 /**
- * Created by KeshavAggarwal on 12/02/17.
+ * Created by Meghdut Mandal on 12/02/17.
  */
 
 class RecyclerAdapterSeeAllTvshows(private val mTvShows: ArrayList<TVShow>?, internal var mContext: Context) : RecyclerView.Adapter<RecyclerAdapterSeeAllTvshows.ViewHolder>() {

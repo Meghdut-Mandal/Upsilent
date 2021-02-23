@@ -39,40 +39,26 @@ dependencies {
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-auth:20.0.2'
-
-    implementation 'com.squareup.picasso:picasso:2.71828'
-
-    implementation 'androidx.cardview:cardview:1.0.0'
-
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
-    implementation 'com.google.android.material:material:1.3.0'
-
-    implementation 'androidx.palette:palette-ktx:1.0.0'
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-analytics:18.0.2'
-
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
-    //ExoPlayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.7'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.7'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
-
-    //kot pref
-    // optional, support LiveData observable preference
+    implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'com.chibatching.kotpref:kotpref:2.13.1'
     implementation 'com.chibatching.kotpref:livedata-support:2.13.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.7'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.7'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.2'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:22.1.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
