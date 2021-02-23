@@ -47,21 +47,18 @@ public class CastTVShowFragment extends Fragment {
     }
 
     public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                tvShowCastMain = (ArrayList<Cast>) args.getSerializable("TV_SHOW_CAST");
-                if (tvShowCastMain.size() == 0) {
-                    noCastTextView.setVisibility(View.VISIBLE);
-                    noCastTextView.setText("No cast is currently available for this show.");
-                } else {
+        getActivity().runOnUiThread(() -> {
+            tvShowCastMain = (ArrayList<Cast>) args.getSerializable("TV_SHOW_CAST");
+            if (tvShowCastMain.size() == 0) {
+                noCastTextView.setVisibility(View.VISIBLE);
+                noCastTextView.setText("No cast is currently available for this show.");
+            } else {
 
-                    recyclerViewAdapterTVShowCast = new RecyclerViewAdapterTVShowCast(tvShowCastMain, context);
-                    recyclerView.setAdapter(recyclerViewAdapterTVShowCast);
+                recyclerViewAdapterTVShowCast = new RecyclerViewAdapterTVShowCast(tvShowCastMain, context);
+                recyclerView.setAdapter(recyclerViewAdapterTVShowCast);
 
-                    LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                    recyclerView.setLayoutManager(verticalManager);
-                }
+                LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+                recyclerView.setLayoutManager(verticalManager);
             }
         });
     }

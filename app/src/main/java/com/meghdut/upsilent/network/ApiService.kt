@@ -1,78 +1,74 @@
-package com.meghdut.upsilent.network;
+package com.meghdut.upsilent.network
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Headers;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by Meghdut Mandal on 12/01/17.
  */
-
-public interface ApiService {
-
+interface ApiService {
     @Headers("access_token: 88484499033")
     @GET("popular")
-    Call<MovieResponse> getPopularMovies(@Query("api_key") String api_key,
-                                         @Query("page") int page);
+    fun getPopularMovies(@Query("api_key") api_key: String?,
+                         @Query("page") page: Int): Call<MovieResponse>
 
     @GET("now_playing")
-    Call<MovieResponse> getNowPlayingMovies(@Query("api_key") String api_key,
-                                            @Query("page") int page);
+    fun getNowPlayingMovies(@Query("api_key") api_key: String?,
+                            @Query("page") page: Int): Call<MovieResponse>
 
     @GET("top_rated")
-    Call<MovieResponse> getTopRatedMovies(@Query("api_key") String api_key,
-                                          @Query("page") int page);
+    fun getTopRatedMovies(@Query("api_key") api_key: String?,
+                          @Query("page") page: Int): Call<MovieResponse>
 
     @GET("upcoming")
-    Call<MovieResponse> getUpcomingMovies(@Query("api_key") String api_key,
-                                          @Query("page") int page);
+    fun getUpcomingMovies(@Query("api_key") api_key: String?,
+                          @Query("page") page: Int): Call<MovieResponse>
 
     @GET("{id}/images")
-    Call<ImageResponse> getBannerImages(@Path("id") int id, @Query("api_key") String api_key);
+    fun getBannerImages(@Path("id") id: Int, @Query("api_key") api_key: String?): Call<ImageResponse>
 
     @GET("{id}")
-    Call<AboutMovieResponse> getAboutMovie(@Path("id") int id, @Query("api_key") String api_key,
-                                           @Query("append_to_response") String videos);
+    fun getAboutMovie(@Path("id") id: Int, @Query("api_key") api_key: String?,
+                      @Query("append_to_response") videos: String?): Call<AboutMovieResponse>
 
     @GET("{id}/credits")
-    Call<CreditResponse> getCredits(@Path("id") int id, @Query("api_key") String api_key);
+    fun getCredits(@Path("id") id: Int, @Query("api_key") api_key: String?): Call<CreditResponse>
 
     @GET("{id}/similar")
-    Call<MovieResponse> getSimilarMovies(@Path("id") int id, @Query("api_key") String api_key, @Query("page") int page);
+    fun getSimilarMovies(@Path("id") id: Int, @Query("api_key") api_key: String?, @Query("page") page: Int): Call<MovieResponse>
 
     @GET("{id}/reviews")
-    Call<ReviewResponse> getReviews(@Path("id") int id, @Query("api_key") String api_key);
+    fun getReviews(@Path("id") id: Int, @Query("api_key") api_key: String?): Call<ReviewResponse>
 
     @GET("movie")
-    Call<MovieResponse> getSearchedMovies(@Query("api_key") String api_key, @Query("query") String query, @Query("page") int page);
+    fun getSearchedMovies(@Query("api_key") api_key: String?, @Query("query") query: String?, @Query("page") page: Int): Call<MovieResponse>
 
     //TV Shows
     @GET("airing_today")
-    Call<TVShowResponse> getAiringToday(@Query("api_key") String api_key,
-                                        @Query("page") int page);
+    fun getAiringToday(@Query("api_key") api_key: String?,
+                       @Query("page") page: Int): Call<TVShowResponse>
 
     @GET("on_the_air")
-    Call<TVShowResponse> getOnAir(@Query("api_key") String api_key,
-                                  @Query("page") int page);
+    fun getOnAir(@Query("api_key") api_key: String?,
+                 @Query("page") page: Int): Call<TVShowResponse>
 
     @GET("popular")
-    Call<TVShowResponse> getPopular(@Query("api_key") String api_key,
-                                    @Query("page") int page);
+    fun getPopular(@Query("api_key") api_key: String?,
+                   @Query("page") page: Int): Call<TVShowResponse>
 
     @GET("top_rated")
-    Call<TVShowResponse> getTopRated(@Query("api_key") String api_key,
-                                     @Query("page") int page);
+    fun getTopRated(@Query("api_key") api_key: String?,
+                    @Query("page") page: Int): Call<TVShowResponse>
 
     @GET("{id}")
-    Call<AboutTVShowResponse> getAboutTVShow(@Path("id") int id, @Query("api_key") String api_key, @Query("append_to_response") String videos);
+    fun getAboutTVShow(@Path("id") id: Int, @Query("api_key") api_key: String?, @Query("append_to_response") videos: String?): Call<AboutTVShowResponse>
 
     @GET("{id}/credits")
-    Call<CreditResponse> getTvShowCredits(@Path("id") int id, @Query("api_key") String api_key);
+    fun getTvShowCredits(@Path("id") id: Int, @Query("api_key") api_key: String?): Call<CreditResponse>
 
     @GET("tv")
-    Call<TVShowResponse> getSearchedShows(@Query("api_key") String api_key, @Query("query") String query, @Query("page") int page);
-
-
+    fun getSearchedShows(@Query("api_key") api_key: String?, @Query("query") query: String?, @Query("page") page: Int): Call<TVShowResponse>
 }

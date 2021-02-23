@@ -40,7 +40,7 @@ class RecyclerViewAdapterSeeAllActivity(private val mMovies: ArrayList<Movie>?, 
                 val date = mMovies[position].date.substring(0, 4)
                 holder.itemView.releaseDateTV.text = date
             }
-            val rating = java.lang.Double.toString(mMovies[position].rating)
+            val rating = mMovies[position].rating.toString()
             holder.itemView.ratingTV.text = rating
             holder.itemView.rootCV.setOnClickListener { v ->
                 val intent = Intent()

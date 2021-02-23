@@ -1,23 +1,13 @@
-package com.meghdut.upsilent.network;
+package com.meghdut.upsilent.network
 
-import com.meghdut.upsilent.models.BackdropImage;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName
+import com.meghdut.upsilent.models.BackdropImage
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 20/01/17.
  */
-
-public class ImageResponse {
+class ImageResponse {
     @SerializedName("backdrops")
-    private ArrayList<BackdropImage> bannerImageLinks;
-
-    public ArrayList<BackdropImage> getBannerImageLinks() {
-        return bannerImageLinks;
-    }
-
-    public void setBannerImageLinks(ArrayList<BackdropImage> bannerImageLinks) {
-        this.bannerImageLinks = bannerImageLinks;
-    }
+    var bannerImageLinks: ArrayList<BackdropImage> = arrayListOf()
 }

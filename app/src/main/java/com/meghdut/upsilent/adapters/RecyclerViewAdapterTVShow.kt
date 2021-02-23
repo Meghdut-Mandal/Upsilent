@@ -1,176 +1,142 @@
-package com.meghdut.upsilent.adapters;
+package com.meghdut.upsilent.adapters
 
-import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.meghdut.upsilent.AboutTVShowActivity;
-import com.meghdut.upsilent.utils.AppUtil;
-import com.meghdut.upsilent.utils.HorizontalItemDecoration;
-import com.meghdut.upsilent.utils.IntentConstants;
-import com.meghdut.upsilent.OnRecyclerViewItemClickListener;
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.SeeAllTVShowsActivity;
-import com.meghdut.upsilent.network.TVShowResponse;
+import android.app.Activity
+import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.AboutTVShowActivity
+import com.meghdut.upsilent.OnRecyclerViewItemClickListener
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.SeeAllTVShowsActivity
+import com.meghdut.upsilent.network.TVShowResponse
+import com.meghdut.upsilent.utils.AppUtil
+import com.meghdut.upsilent.utils.HorizontalItemDecoration
+import com.meghdut.upsilent.utils.IntentConstants
 
 /**
  * Created by Meghdut Mandal on 09/02/17.
  */
-
-public class RecyclerViewAdapterTVShow extends RecyclerView.Adapter<RecyclerViewAdapterTVShow.ViewHolder> implements OnRecyclerViewItemClickListener {
-
-    private TVShowResponse[] mTVShows;
-    Context mContext;
-    private RecyclerViewAdapterTVShowHorizontal recyclerViewAdapter;
-
-    public RecyclerViewAdapterTVShow(TVShowResponse[] tvShows, Context context) {
-        mTVShows = tvShows;
-        mContext = context;
+class RecyclerViewAdapterTVShow(private val mTVShows: Array<TVShowResponse?>?, var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterTVShow.ViewHolder>(), OnRecyclerViewItemClickListener {
+    private var recyclerViewAdapter: RecyclerViewAdapterTVShowHorizontal? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.acitivity_main_second_tvshows, parent, false)
+        return ViewHolder(v)
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.acitivity_main_second_tvshows, parent, false);
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        if (mTVShows != null && mTVShows.length > position) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (mTVShows != null && mTVShows.size > position) {
             if (getItemViewType(position) == 0) {
                 if (mTVShows[position] != null) {
-                    holder.tvShowType.setText("Airing Today");
-                    holder.seeAlltextView.setText("See all");
-                    holder.seeAlltextView.setOnClickListener(v -> {
-                        Intent intent = new Intent();
-                        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext).toBundle();
-                        intent.putExtra("ABCD", mTVShows[position].getTvShows());
-                        intent.putExtra("TVSHOW_TYPE", "Airing Today");
-                        intent.setClass(mContext, SeeAllTVShowsActivity.class);
-                        mContext.startActivity(intent, bundle);
-                    });
-                    recyclerViewAdapter = new RecyclerViewAdapterTVShowHorizontal(mTVShows[position].getTvShows(), mContext);
-                    holder.horizontalRecyclerView.setAdapter(recyclerViewAdapter);
-                    LinearLayoutManager horizontalManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-                    holder.horizontalRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)));
-                    holder.horizontalRecyclerView.setLayoutManager(horizontalManager);
-                    recyclerViewAdapter.setOnItemClickListener(this, position);
+                    holder.tvShowType.text = "Airing Today"
+                    holder.seeAlltextView.text = "See all"
+                    holder.seeAlltextView.setOnClickListener { v: View? ->
+                        val intent = Intent()
+                        val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
+                        intent.putExtra("ABCD", mTVShows[position]!!.tvShows)
+                        intent.putExtra("TVSHOW_TYPE", "Airing Today")
+                        intent.setClass(mContext, SeeAllTVShowsActivity::class.java)
+                        mContext.startActivity(intent, bundle)
+                    }
+                    recyclerViewAdapter = RecyclerViewAdapterTVShowHorizontal(mTVShows[position]!!.tvShows, mContext)
+                    holder.horizontalRecyclerView.adapter = recyclerViewAdapter
+                    val horizontalManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+                    holder.horizontalRecyclerView.addItemDecoration(HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)))
+                    holder.horizontalRecyclerView.layoutManager = horizontalManager
+                    recyclerViewAdapter!!.setOnItemClickListener(this, position)
                 }
-
             } else if (getItemViewType(position) == 1) {
                 if (mTVShows[position] != null) {
-                    holder.tvShowType.setText("On Air");
-                    holder.seeAlltextView.setText("See all");
-                    holder.seeAlltextView.setOnClickListener(v -> {
-                        Intent intent = new Intent();
-                        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext).toBundle();
-                        intent.setClass(mContext, SeeAllTVShowsActivity.class);
-                        intent.putExtra("ABCD", mTVShows[position].getTvShows());
-                        intent.putExtra("TVSHOW_TYPE", "On Air");
-                        mContext.startActivity(intent, bundle);
-
-                    });
-                    recyclerViewAdapter = new RecyclerViewAdapterTVShowHorizontal(mTVShows[position].getTvShows(), mContext);
-                    LinearLayoutManager horizontalManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-                    holder.horizontalRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)));
-                    holder.horizontalRecyclerView.setLayoutManager(horizontalManager);
-                    holder.horizontalRecyclerView.setAdapter(recyclerViewAdapter);
-                    recyclerViewAdapter.setOnItemClickListener(this, position);
+                    holder.tvShowType.text = "On Air"
+                    holder.seeAlltextView.text = "See all"
+                    holder.seeAlltextView.setOnClickListener { v: View? ->
+                        val intent = Intent()
+                        val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
+                        intent.setClass(mContext, SeeAllTVShowsActivity::class.java)
+                        intent.putExtra("ABCD", mTVShows[position]!!.tvShows)
+                        intent.putExtra("TVSHOW_TYPE", "On Air")
+                        mContext.startActivity(intent, bundle)
+                    }
+                    recyclerViewAdapter = RecyclerViewAdapterTVShowHorizontal(mTVShows[position]!!.tvShows, mContext)
+                    val horizontalManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+                    holder.horizontalRecyclerView.addItemDecoration(HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)))
+                    holder.horizontalRecyclerView.layoutManager = horizontalManager
+                    holder.horizontalRecyclerView.adapter = recyclerViewAdapter
+                    recyclerViewAdapter!!.setOnItemClickListener(this, position)
                 }
-
             } else if (getItemViewType(position) == 2) {
                 if (mTVShows[position] != null) {
-                    holder.tvShowType.setText("Popular Shows");
-                    holder.seeAlltextView.setText("See all");
-                    holder.seeAlltextView.setOnClickListener(v -> {
-                        Intent intent = new Intent();
-                        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext).toBundle();
-                        intent.putExtra("ABCD", mTVShows[position].getTvShows());
-                        intent.putExtra("TVSHOW_TYPE", "Popular Shows");
-                        intent.setClass(mContext, SeeAllTVShowsActivity.class);
-                        mContext.startActivity(intent, bundle);
-
-                    });
-                    recyclerViewAdapter = new RecyclerViewAdapterTVShowHorizontal(mTVShows[position].getTvShows(), mContext);
-                    LinearLayoutManager horizontalManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-                    holder.horizontalRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)));
-                    holder.horizontalRecyclerView.setLayoutManager(horizontalManager);
-                    holder.horizontalRecyclerView.setAdapter(recyclerViewAdapter);
-                    recyclerViewAdapter.setOnItemClickListener(this, position);
+                    holder.tvShowType.text = "Popular Shows"
+                    holder.seeAlltextView.text = "See all"
+                    holder.seeAlltextView.setOnClickListener { v: View? ->
+                        val intent = Intent()
+                        val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
+                        intent.putExtra("ABCD", mTVShows[position]!!.tvShows)
+                        intent.putExtra("TVSHOW_TYPE", "Popular Shows")
+                        intent.setClass(mContext, SeeAllTVShowsActivity::class.java)
+                        mContext.startActivity(intent, bundle)
+                    }
+                    recyclerViewAdapter = RecyclerViewAdapterTVShowHorizontal(mTVShows[position]!!.tvShows, mContext)
+                    val horizontalManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+                    holder.horizontalRecyclerView.addItemDecoration(HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)))
+                    holder.horizontalRecyclerView.layoutManager = horizontalManager
+                    holder.horizontalRecyclerView.adapter = recyclerViewAdapter
+                    recyclerViewAdapter!!.setOnItemClickListener(this, position)
                 }
             } else if (getItemViewType(position) == 3) {
                 if (mTVShows[position] != null) {
-                    holder.tvShowType.setText("Top Rated Shows");
-                    holder.seeAlltextView.setText("See all");
-                    holder.seeAlltextView.setOnClickListener(v -> {
-                        Intent intent = new Intent();
-                        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext).toBundle();
-                        intent.putExtra("ABCD", mTVShows[position].getTvShows());
-                        intent.putExtra("TVSHOW_TYPE", "Top Rated Shows");
-                        intent.setClass(mContext, SeeAllTVShowsActivity.class);
-                        mContext.startActivity(intent, bundle);
-
-                    });
-                    recyclerViewAdapter = new RecyclerViewAdapterTVShowHorizontal(mTVShows[position].getTvShows(), mContext);
-                    holder.horizontalRecyclerView.setAdapter(recyclerViewAdapter);
-                    LinearLayoutManager horizontalManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-                    holder.horizontalRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)));
-                    holder.horizontalRecyclerView.setLayoutManager(horizontalManager);
-                    recyclerViewAdapter.setOnItemClickListener(this, position);
+                    holder.tvShowType.text = "Top Rated Shows"
+                    holder.seeAlltextView.text = "See all"
+                    holder.seeAlltextView.setOnClickListener { v: View? ->
+                        val intent = Intent()
+                        val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
+                        intent.putExtra("ABCD", mTVShows[position]!!.tvShows)
+                        intent.putExtra("TVSHOW_TYPE", "Top Rated Shows")
+                        intent.setClass(mContext, SeeAllTVShowsActivity::class.java)
+                        mContext.startActivity(intent, bundle)
+                    }
+                    recyclerViewAdapter = RecyclerViewAdapterTVShowHorizontal(mTVShows[position]!!.tvShows, mContext)
+                    holder.horizontalRecyclerView.adapter = recyclerViewAdapter
+                    val horizontalManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+                    holder.horizontalRecyclerView.addItemDecoration(HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)))
+                    holder.horizontalRecyclerView.layoutManager = horizontalManager
+                    recyclerViewAdapter!!.setOnItemClickListener(this, position)
                 }
-
             }
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return mTVShows.length;
+    override fun getItemCount(): Int {
+        return mTVShows!!.size
     }
 
-
-    @Override
-    public int getItemViewType(int position) {
-        return position % 4;
+    override fun getItemViewType(position: Int): Int {
+        return position % 4
     }
 
-
-    @Override
-    public void onRecyclerViewItemClicked(int verticalPosition, int horizontalPosition, View view) {
-        Intent intent = new Intent();
-        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, view, view.getTransitionName()).toBundle();
-        intent.setClass(mContext, AboutTVShowActivity.class);
-        intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, mTVShows[verticalPosition].getTvShows().get(horizontalPosition).getId());
-        intent.putExtra(IntentConstants.INTENT_KEY_POSTER_PATH, mTVShows[verticalPosition].getTvShows().get(horizontalPosition).getPosterPath());
-        intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_NAME, mTVShows[verticalPosition].getTvShows().get(horizontalPosition).getTitle());
-        mContext.startActivity(intent, bundle);
-
+    override fun onRecyclerViewItemClicked(verticalPosition: Int, horizontalPosition: Int, view: View?) {
+        val intent = Intent()
+        val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity, view, view?.transitionName).toBundle()
+        intent.setClass(mContext, AboutTVShowActivity::class.java)
+        intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, mTVShows!![verticalPosition]!!.tvShows[horizontalPosition].id)
+        intent.putExtra(IntentConstants.INTENT_KEY_POSTER_PATH, mTVShows[verticalPosition]!!.tvShows[horizontalPosition].posterPath)
+        intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_NAME, mTVShows[verticalPosition]!!.tvShows[horizontalPosition].title)
+        mContext.startActivity(intent, bundle)
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvShowType;
-        RecyclerView horizontalRecyclerView;
-        TextView seeAlltextView;
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var tvShowType: TextView = itemView.findViewById(R.id.tvShowTypeTextView)
+        var horizontalRecyclerView: RecyclerView
+        var seeAlltextView: TextView
 
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            tvShowType = itemView.findViewById(R.id.tvShowTypeTextView);
-            seeAlltextView = itemView.findViewById(R.id.seeAllTextView);
-            horizontalRecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal);
+        init {
+            seeAlltextView = itemView.findViewById(R.id.seeAllTextView)
+            horizontalRecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal)
         }
     }
-
-
 }
-

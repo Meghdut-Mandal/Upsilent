@@ -1,26 +1,20 @@
-package com.meghdut.upsilent.utils;
+package com.meghdut.upsilent.utils
 
-import android.content.Context;
-import android.util.DisplayMetrics;
+import android.content.Context
+import android.util.DisplayMetrics
+import kotlin.math.roundToLong
 
 /**
  * Created by Meghdut Mandal on 01/02/20.
  */
-public class AppUtil {
-
-    public static boolean isEmptyOrNullString(String input) {
-        if ((input != null) && (!input.trim().isEmpty())) {
-            return false;
-        } else {
-            return true;
-        }
+object AppUtil {
+    fun isEmptyOrNullString(input: String?): Boolean {
+        return input == null || input.trim { it <= ' ' }.isEmpty()
     }
 
-    public static int dpToPx(Context context, int dp) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
+    @JvmStatic
+    fun dpToPx(context: Context, dp: Int): Int {
+        val displayMetrics = context.resources.displayMetrics
+        return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
-
-
 }

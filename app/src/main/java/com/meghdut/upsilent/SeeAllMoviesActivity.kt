@@ -1,186 +1,129 @@
-package com.meghdut.upsilent;
+package com.meghdut.upsilent
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.adapters.RecyclerViewAdapterSeeAllActivity
+import com.meghdut.upsilent.models.Movie
+import com.meghdut.upsilent.network.ApiService
+import com.meghdut.upsilent.network.MovieResponse
+import com.meghdut.upsilent.network.URLConstants
+import com.meghdut.upsilent.utils.AppUtil.dpToPx
+import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener
+import com.meghdut.upsilent.utils.GridSpacingItemDecoration
+import com.meghdut.upsilent.utils.SpacesItemDecoration
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import android.transition.Slide;
-import android.view.Gravity;
-
-import com.meghdut.upsilent.adapters.RecyclerViewAdapterSeeAllActivity;
-import com.meghdut.upsilent.models.Movie;
-import com.meghdut.upsilent.network.ApiService;
-import com.meghdut.upsilent.network.MovieResponse;
-import com.meghdut.upsilent.network.URLConstants;
-import com.meghdut.upsilent.utils.AppUtil;
-import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener;
-import com.meghdut.upsilent.utils.GridSpacingItemDecoration;
-import com.meghdut.upsilent.utils.SpacesItemDecoration;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class SeeAllMoviesActivity extends AppCompatActivity {
-    private EndlessRecyclerViewScrollListener scrollListener;
-    RecyclerView recyclerView;
-    RecyclerViewAdapterSeeAllActivity adapter;
-    ArrayList<Movie> movies;
-    String movieType;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.see_all_activity_movie);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Slide slide = new Slide(Gravity.BOTTOM);
-        getWindow().setEnterTransition(slide);
-        getWindow().setAllowEnterTransitionOverlap(true);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Intent intent = getIntent();
-        movies = (ArrayList<Movie>) intent.getSerializableExtra("ABCD");
-        movieType = intent.getStringExtra("MOVIETYPE");
-
-        setTitle(movieType);
-
-        recyclerView = findViewById(R.id.seeAllActivityRecyclerViewMovies);
-
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-
-        adapter = new RecyclerViewAdapterSeeAllActivity(movies, this);
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, AppUtil.dpToPx(this, 16), true));
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(adapter);
-
-        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadMoreData(page);
+class SeeAllMoviesActivity : AppCompatActivity() {
+    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    private lateinit var recyclerView: RecyclerView
+    lateinit var adapter: RecyclerViewAdapterSeeAllActivity
+    lateinit var movies: ArrayList<Movie>
+    private lateinit var movieType: String
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.see_all_activity_movie)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        val slide = Slide(Gravity.BOTTOM)
+        window.enterTransition = slide
+        window.allowEnterTransitionOverlap = true
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        val intent = intent
+        movies = intent.getSerializableExtra("ABCD") as ArrayList<Movie>
+        movieType = intent.getStringExtra("MOVIETYPE")!!
+        title = movieType
+        recyclerView = findViewById(R.id.seeAllActivityRecyclerViewMovies)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        recyclerView.addItemDecoration(SpacesItemDecoration(spacingInPixels))
+        adapter = RecyclerViewAdapterSeeAllActivity(movies, this)
+        val gridLayoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(this, 16), true))
+        recyclerView.layoutManager = gridLayoutManager
+        recyclerView.adapter = adapter
+        scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                loadMoreData(page)
             }
-        };
-
-        recyclerView.addOnScrollListener(scrollListener);
+        }
+        recyclerView.addOnScrollListener(scrollListener)
     }
 
-    private void loadMoreData(int page) {
-
-        Retrofit retrofit = new Retrofit.Builder()
+    private fun loadMoreData(page: Int) {
+        val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.MOVIE_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService service = retrofit.create(ApiService.class);
-        if (movieType.equals("Popular Movies")) {
-
-            Call<MovieResponse> call = service.getPopularMovies(URLConstants.API_KEY, page);
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                .build()
+        val service = retrofit.create(ApiService::class.java)
+        if (movieType == "Popular Movies") {
+            val call = service.getPopularMovies(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<MovieResponse> {
+                override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                     //Log.i("ABC2", "FUN");
-                    ArrayList<Movie> movieList = response.body().getMovies();
-                    if (movieList == null) {
-                        return;
+                    val movieList = response.body()!!.movies
+                    for (obj in movieList) {
+                        movies.add(obj)
                     }
-                    for (Movie obj : movieList) {
-                        movies.add(obj);
-                    }
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (movieType.equals("Now Playing")) {
-            Call<MovieResponse> call = service.getNowPlayingMovies(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                    ArrayList<Movie> movieList = response.body().getMovies();
-                    if (movieList == null) {
-                        return;
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+            })
+        } else if (movieType == "Now Playing") {
+            val call = service.getNowPlayingMovies(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<MovieResponse> {
+                override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                    val movieList = response.body()!!.movies
+                    for (obj in movieList) {
+                        movies.add(obj)
                     }
-                    for (Movie obj : movieList) {
-                        movies.add(obj);
-                    }
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (movieType.equals("Top Rated Movies")) {
-            Call<MovieResponse> call = service.getTopRatedMovies(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+            })
+        } else if (movieType == "Top Rated Movies") {
+            val call = service.getTopRatedMovies(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<MovieResponse> {
+                override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                     //Log.i("ABC2", "FUN");
-                    ArrayList<Movie> movieList = response.body().getMovies();
-                    if (movieList == null) {
-                        return;
+                    val movieList = response.body()!!.movies
+                    for (obj in movieList) {
+                        movies.add(obj)
                     }
-                    for (Movie obj : movieList) {
-                        movies.add(obj);
-                    }
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (movieType.equals("Upcoming Movies")) {
-            Call<MovieResponse> call = service.getUpcomingMovies(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                    ArrayList<Movie> movieList = response.body().getMovies();
-                    if (movieList == null) {
-                        return;
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+            })
+        } else if (movieType == "Upcoming Movies") {
+            val call = service.getUpcomingMovies(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<MovieResponse> {
+                override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                    val movieList = response.body()!!.movies
+                    for (obj in movieList) {
+                        movies.add(obj)
                     }
-                    for (Movie obj : movieList) {
-                        movies.add(obj);
-                    }
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+            })
         }
-
-
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

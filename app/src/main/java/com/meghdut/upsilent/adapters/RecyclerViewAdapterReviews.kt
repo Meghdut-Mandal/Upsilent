@@ -1,19 +1,15 @@
 package com.meghdut.upsilent.adapters
 
 import android.content.Context
-import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
+import androidx.recyclerview.widget.RecyclerView
 import com.meghdut.upsilent.R
 import com.meghdut.upsilent.models.Review
 import kotlinx.android.synthetic.main.review_list_item_view.view.*
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 14/03/17.
@@ -29,7 +25,7 @@ class RecyclerViewAdapterReviews(private val mReviews: ArrayList<Review>, intern
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var secondInitialOfAuthor: String? = null
-        for (i in 0 until mReviews[position].author.length) {
+        for (i in mReviews[position].author.indices) {
             if (mReviews[position].author[i] == ' ') {
                 secondInitialOfAuthor = mReviews[position].author.substring(i + 1, i + 2)
                 holder.itemView.circleTV.text = mReviews[position].author.substring(0, 1) + secondInitialOfAuthor

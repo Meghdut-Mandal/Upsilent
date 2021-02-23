@@ -22,7 +22,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ExoPlayerActivity"></activity>
+        <activity android:name=".ExoPlayerActivity" />
         <activity
             android:name=".AboutMovieActivity"
             android:theme="@style/AppTheme.NoActionBar" />

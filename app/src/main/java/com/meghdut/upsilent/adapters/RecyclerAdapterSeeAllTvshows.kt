@@ -4,24 +4,18 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-
+import androidx.recyclerview.widget.RecyclerView
 import com.meghdut.upsilent.AboutTVShowActivity
-import com.meghdut.upsilent.utils.IntentConstants
 import com.meghdut.upsilent.R
 import com.meghdut.upsilent.models.TVShow
 import com.meghdut.upsilent.network.URLConstants
+import com.meghdut.upsilent.utils.IntentConstants
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.see_all_recyclerview_item.view.*
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 12/02/17.
@@ -42,7 +36,7 @@ class RecyclerAdapterSeeAllTvshows(private val mTvShows: ArrayList<TVShow>?, int
                 val date = mTvShows[position].date.substring(0, 4)
                 holder.itemView.releaseDateTV.text = date
             }
-            val rating = java.lang.Double.toString(mTvShows[position].rating)
+            val rating = mTvShows[position].rating.toString()
             holder.itemView.ratingTV.text = rating
             holder.itemView.rootCV.setOnClickListener { v ->
                 val intent = Intent()

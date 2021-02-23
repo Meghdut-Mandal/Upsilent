@@ -1,150 +1,115 @@
-package com.meghdut.upsilent;
+package com.meghdut.upsilent
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
+import android.app.SearchManager
+import android.content.Intent
+import android.os.Bundle
+import android.text.InputType
+import android.text.TextUtils
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.adapters.MoviesSearchAdapter
+import com.meghdut.upsilent.models.Movie
+import com.meghdut.upsilent.network.ApiService
+import com.meghdut.upsilent.network.MovieResponse
+import com.meghdut.upsilent.network.URLConstants
+import com.meghdut.upsilent.utils.AppUtil.dpToPx
+import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener
+import com.meghdut.upsilent.utils.GridSpacingItemDecoration
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
-import androidx.appcompat.app.AppCompatActivity;
+class SearchMovieActivity : AppCompatActivity() {
+    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    private lateinit var searchView: SearchView
+    private lateinit var searchBack: ImageButton
+    private lateinit var progress: ProgressBar
 
-import android.os.Bundle;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.InputType;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-
-import com.meghdut.upsilent.adapters.MoviesSearchAdapter;
-import com.meghdut.upsilent.models.Movie;
-import com.meghdut.upsilent.network.ApiService;
-import com.meghdut.upsilent.network.MovieResponse;
-import com.meghdut.upsilent.network.URLConstants;
-import com.meghdut.upsilent.utils.AppUtil;
-import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener;
-import com.meghdut.upsilent.utils.GridSpacingItemDecoration;
-import com.meghdut.upsilent.utils.SpacesItemDecoration;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class SearchMovieActivity extends AppCompatActivity {
-    private EndlessRecyclerViewScrollListener scrollListener;
-    android.widget.SearchView searchView;
-    ImageButton searchBack;
-    ProgressBar progress;
-    MoviesSearchAdapter adapter;
-    RecyclerView searchResultsRV;
-    ArrayList<Movie> data;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = findViewById(R.id.search_view);
-        searchView.setQueryHint("Search Movies");
-        searchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        searchView.setImeOptions(searchView.getImeOptions() | EditorInfo.IME_ACTION_SEARCH |
-                EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_FLAG_NO_FULLSCREEN);
-        progress = findViewById(R.id.progressBar);
-        searchResultsRV = findViewById(R.id.searchResultsRV);
-        searchBack = findViewById(R.id.searchback);
-
-        data = new ArrayList<>();
-
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-        searchResultsRV.addItemDecoration(new GridSpacingItemDecoration(2, AppUtil.dpToPx(this, 16), true));
-        searchResultsRV.setLayoutManager(gridLayoutManager);
-        adapter = new MoviesSearchAdapter(data, this);
-        searchResultsRV.setAdapter(adapter);
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                searchFor(query, 1);
-                scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
-                    @Override
-                    public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                        searchFor(query, page);
-
+    private lateinit var adapter: MoviesSearchAdapter
+    private lateinit var searchResultsRV: RecyclerView
+    private var data: ArrayList<Movie>? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_search)
+        val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
+        searchView = findViewById(R.id.search_view)
+        searchView.queryHint = "Search Movies"
+        searchView.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
+        searchView.imeOptions = searchView.imeOptions or EditorInfo.IME_ACTION_SEARCH or
+                EditorInfo.IME_FLAG_NO_EXTRACT_UI or EditorInfo.IME_FLAG_NO_FULLSCREEN
+        progress = findViewById(R.id.progressBar)
+        searchResultsRV = findViewById(R.id.searchResultsRV)
+        searchBack = findViewById(R.id.searchback)
+        data = ArrayList()
+        val gridLayoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
+        searchResultsRV.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(this, 16), true))
+        searchResultsRV.layoutManager = gridLayoutManager
+        adapter = MoviesSearchAdapter(data!!, this)
+        searchResultsRV.adapter = adapter
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchFor(query, 1)
+                scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
+                    override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                        searchFor(query, page)
                     }
-                };
-                searchResultsRV.addOnScrollListener(scrollListener);
-                return true;
+                }
+                searchResultsRV.addOnScrollListener(scrollListener)
+                return true
             }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                searchResultsRV.setVisibility(View.GONE);
-                progress.setVisibility(View.GONE);
-                data.clear();
-                return true;
+            override fun onQueryTextChange(newText: String): Boolean {
+                searchResultsRV.visibility = View.GONE
+                progress.visibility = View.GONE
+                data!!.clear()
+                return true
             }
-        });
+        })
     }
 
-    private void searchFor(String query, int page) {
-        if (page == 1)
-            progress.setVisibility(View.VISIBLE);
-        searchResultsRV.setVisibility(View.VISIBLE);
-        searchView.clearFocus();
-
-        Retrofit retrofit = new Retrofit.Builder()
+    private fun searchFor(query: String?, page: Int) {
+        if (page == 1) progress.visibility = View.VISIBLE
+        searchResultsRV.visibility = View.VISIBLE
+        searchView.clearFocus()
+        val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.SEARCH_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService service = retrofit.create(ApiService.class);
-        Call<MovieResponse> call = service.getSearchedMovies(URLConstants.API_KEY, query, page);
-
-        call.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                progress.setVisibility(View.GONE);
-                ArrayList<Movie> searchMovieList = response.body().getMovies();
-                if (searchMovieList == null) {
-                    return;
+                .build()
+        val service = retrofit.create(ApiService::class.java)
+        val call = service.getSearchedMovies(URLConstants.API_KEY, query, page)
+        call.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                progress.visibility = View.GONE
+                val searchMovieList = response.body()!!.movies
+                for (obj in searchMovieList) {
+                    data!!.add(obj)
                 }
-                for (Movie obj : searchMovieList) {
-                    data.add(obj);
-                }
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-
-        searchBack.setOnClickListener(v -> {
-            onBackPressed();
-        });
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+        })
+        searchBack.setOnClickListener { v: View? -> onBackPressed() }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
             if (!TextUtils.isEmpty(query)) {
-                searchView.setQuery(query, false);
-                searchFor(query, 1);
+                searchView.setQuery(query, false)
+                searchFor(query, 1)
             }
-
         }
     }
-
 }

@@ -1,93 +1,71 @@
-package com.meghdut.upsilent.adapters;
+package com.meghdut.upsilent.adapters
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.meghdut.upsilent.fragments.CastMovieFragment;
-import com.meghdut.upsilent.fragments.InfoAboutMovieFragment;
-import com.meghdut.upsilent.fragments.ReviewsFragment;
-
-import java.util.HashMap;
-
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import com.meghdut.upsilent.fragments.CastMovieFragment
+import com.meghdut.upsilent.fragments.InfoAboutMovieFragment
+import com.meghdut.upsilent.fragments.ReviewsFragment
+import java.lang.IllegalArgumentException
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 25/01/17.
  */
-
-public class FragmentPager extends FragmentPagerAdapter {
-    HashMap<Integer, Fragment> map = new HashMap<>();
-
-
-    public FragmentPager(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        Fragment fragment;
-        switch (position) {
-            case 0:
-                fragment = map.get(position);
-                if (fragment == null) {
-                    fragment = InfoAboutMovieFragment.newInstance();
-                    map.put(position, fragment);
-                    return fragment;
+class FragmentPager(fm: FragmentManager?) : FragmentPagerAdapter(fm!!) {
+    private var map = HashMap<Int, Fragment>()
+    override fun getItem(position: Int): Fragment {
+        var fragment: Fragment?
+        when (position) {
+            0 -> {
+                fragment = map[position]
+                return if (fragment == null) {
+                    fragment = InfoAboutMovieFragment.newInstance()
+                    map[position] = fragment
+                    fragment
                 } else {
-                    return fragment;
+                    fragment
                 }
-
-            case 1:
-                fragment = map.get(position);
-                if (fragment == null) {
-                    fragment = CastMovieFragment.newInstance();
-                    map.put(position, fragment);
-                    return fragment;
+            }
+            1 -> {
+                fragment = map[position]
+                return if (fragment == null) {
+                    fragment = CastMovieFragment.newInstance()
+                    map[position] = fragment
+                    fragment
                 } else {
-                    return fragment;
+                    fragment
                 }
-
-
-            case 2:
-                fragment = map.get(position);
-                if (fragment == null) {
-                    fragment = ReviewsFragment.newInstance();
-                    map.put(position, fragment);
-                    return fragment;
+            }
+            2 -> {
+                fragment = map[position]
+                return if (fragment == null) {
+                    fragment = ReviewsFragment.newInstance()
+                    map[position] = fragment
+                    fragment
                 } else {
-                    return fragment;
+                    fragment
                 }
-
+            }
         }
-        return null;
-
+        throw IllegalArgumentException("Number cant exceed range!!")
     }
 
-    @Override
-    public int getCount() {
-        return 3;
+    override fun getCount(): Int {
+        return 3
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "INFO";
-            case 1:
-                return "CAST";
-            case 2:
-                return "REVIEWS";
+    override fun getPageTitle(position: Int): CharSequence? {
+        when (position) {
+            0 -> return "INFO"
+            1 -> return "CAST"
+            2 -> return "REVIEWS"
         }
-        return null;
+        return null
     }
 
-    public Fragment function(int position) {
-
-        Fragment fragment = map.get(position);
-        if (fragment == null) {
-            return getItem(position);
-        } else {
-            return fragment;
-        }
+    fun function(position: Int): Fragment {
+        val fragment = map[position]
+        return fragment ?: getItem(position)
     }
 }

@@ -59,43 +59,39 @@ public class InfoAboutTVShowFragment extends Fragment {
 
 
     public static InfoAboutTVShowFragment newInstance() {
-        InfoAboutTVShowFragment infoAboutTVShowFragment = new InfoAboutTVShowFragment();
-        return infoAboutTVShowFragment;
+        return new InfoAboutTVShowFragment();
     }
 
     public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                aboutTvShowTextView.setText(args.getString("OVERVIEW"));
-                String firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"));
-                firstAirDateTextView.setText(firstAirDate);
-                String lastAirDate = dateGenerator(args.getString("LAST_AIR_DATE"));
-                lastAirDateTextView.setText(lastAirDate);
-                ArrayList<TVShowsCreaters> obj = (ArrayList<TVShowsCreaters>) args.getSerializable("CREATORS");
-                for (int i = 0; i < obj.size(); i++) {
-                    if (i < obj.size() - 1)
-                        createdByTextView.append(obj.get(i).getName() + ", ");
-                    else
-                        createdByTextView.append(obj.get(i).getName());
-
-                }
-                showTypeTextView.setText(args.getString("SHOW_TYPE"));
-                showStatusTextView.setText(args.getString("STATUS"));
-
-                mainTrailerTvShowsThumbnails = (ArrayList<Trailer>) args.getSerializable("TRAILER_THUMBNAILS");
-                if (mainTrailerTvShowsThumbnails.size() == 0) {
-                    noReviewTextView.setVisibility(View.VISIBLE);
-                    noReviewTextView.setText("No Trailers are currently available.");
-                } else {
-                    LinearLayoutManager HorizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                    trailorsRecyclerView.setLayoutManager(HorizontalManager);
-                    trailorsRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
-                    recyclerAdapterTVShowTrailer = new RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, context);
-                    trailorsRecyclerView.setAdapter(recyclerAdapterTVShowTrailer);
-                }
+        getActivity().runOnUiThread(() -> {
+            aboutTvShowTextView.setText(args.getString("OVERVIEW"));
+            String firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"));
+            firstAirDateTextView.setText(firstAirDate);
+            String lastAirDate = dateGenerator(args.getString("LAST_AIR_DATE"));
+            lastAirDateTextView.setText(lastAirDate);
+            ArrayList<TVShowsCreaters> obj = (ArrayList<TVShowsCreaters>) args.getSerializable("CREATORS");
+            for (int i = 0; i < obj.size(); i++) {
+                if (i < obj.size() - 1)
+                    createdByTextView.append(obj.get(i).getName() + ", ");
+                else
+                    createdByTextView.append(obj.get(i).getName());
 
             }
+            showTypeTextView.setText(args.getString("SHOW_TYPE"));
+            showStatusTextView.setText(args.getString("STATUS"));
+
+            mainTrailerTvShowsThumbnails = (ArrayList<Trailer>) args.getSerializable("TRAILER_THUMBNAILS");
+            if (mainTrailerTvShowsThumbnails.size() == 0) {
+                noReviewTextView.setVisibility(View.VISIBLE);
+                noReviewTextView.setText("No Trailers are currently available.");
+            } else {
+                LinearLayoutManager HorizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                trailorsRecyclerView.setLayoutManager(HorizontalManager);
+                trailorsRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
+                recyclerAdapterTVShowTrailer = new RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, context);
+                trailorsRecyclerView.setAdapter(recyclerAdapterTVShowTrailer);
+            }
+
         });
 
     }

@@ -1,123 +1,40 @@
-package com.meghdut.upsilent.network;
+package com.meghdut.upsilent.network
 
-import com.meghdut.upsilent.models.Genre;
-import com.meghdut.upsilent.models.TVShowsCreaters;
-import com.meghdut.upsilent.models.Video;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName
+import com.meghdut.upsilent.models.Genre
+import com.meghdut.upsilent.models.TVShowsCreaters
+import com.meghdut.upsilent.models.Video
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 09/02/17.
  */
-
-public class AboutTVShowResponse {
+class AboutTVShowResponse {
     @SerializedName("overview")
-    private String overview;
+    var overview: String = ""
 
     @SerializedName("first_air_date")
-    private String firstAirDate;
+    var firstAirDate: String = ""
 
     @SerializedName("last_air_date")
-    private String lastAirDate;
+    var lastAirDate: String = ""
 
     @SerializedName("genres")
-    ArrayList<Genre> genres;
+    var genres: ArrayList<Genre> = arrayListOf()
 
     @SerializedName("created_by")
-    ArrayList<TVShowsCreaters> tvShowsCreaters;
+    var tvShowsCreaters: ArrayList<TVShowsCreaters> = arrayListOf()
 
     @SerializedName("type")
-    private String showType;
-
-    private String status;
+    var showType: String = ""
+    var status: String = ""
 
     @SerializedName("number_of_episodes")
-    private int episodes;
+    var episodes = 0
 
     @SerializedName("number_of_seasons")
-    private int seasons;
+    var seasons = 0
 
     @SerializedName("videos")
-    private Video video;
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
-
-    public void setFirstAirDate(String firstAirDate) {
-        this.firstAirDate = firstAirDate;
-    }
-
-    public ArrayList<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(ArrayList<Genre> genres) {
-        this.genres = genres;
-    }
-
-    public ArrayList<TVShowsCreaters> getTvShowsCreaters() {
-        return tvShowsCreaters;
-    }
-
-    public void setTvShowsCreaters(ArrayList<TVShowsCreaters> tvShowsCreaters) {
-        this.tvShowsCreaters = tvShowsCreaters;
-    }
-
-    public String getShowType() {
-        return showType;
-    }
-
-    public void setShowType(String showType) {
-        this.showType = showType;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getEpisodes() {
-        return episodes;
-    }
-
-    public void setEpisodes(int episodes) {
-        this.episodes = episodes;
-    }
-
-    public int getSeasons() {
-        return seasons;
-    }
-
-    public void setSeasons(int seasons) {
-        this.seasons = seasons;
-    }
-
-    public String getLastAirDate() {
-        return lastAirDate;
-    }
-
-    public void setLastAirDate(String lastAirDate) {
-        this.lastAirDate = lastAirDate;
-    }
-
-    public Video getVideo() {
-        return video;
-    }
-
-    public void setVideo(Video video) {
-        this.video = video;
-    }
+    var video: Video? = null
 }

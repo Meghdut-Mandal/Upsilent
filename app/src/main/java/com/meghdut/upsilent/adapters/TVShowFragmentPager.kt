@@ -1,58 +1,45 @@
-package com.meghdut.upsilent.adapters;
+package com.meghdut.upsilent.adapters
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.meghdut.upsilent.fragments.CastTVShowFragment;
-import com.meghdut.upsilent.fragments.InfoAboutTVShowFragment;
-
-import java.util.HashMap;
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import com.meghdut.upsilent.fragments.CastTVShowFragment
+import com.meghdut.upsilent.fragments.InfoAboutTVShowFragment
+import java.lang.IllegalArgumentException
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 09/02/17.
  */
-
-public class TVShowFragmentPager extends FragmentPagerAdapter {
-    private HashMap<Integer, Fragment> map = new HashMap<>();
-
-    public TVShowFragmentPager(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                map.put(position, InfoAboutTVShowFragment.newInstance());
-                return map.get(position);
-            case 1:
-                map.put(position, CastTVShowFragment.newInstance());
-                return map.get(position);
+class TVShowFragmentPager(fm: FragmentManager?) : FragmentPagerAdapter(fm!!) {
+    private val map = HashMap<Int, Fragment>()
+    override fun getItem(position: Int): Fragment {
+        when (position) {
+            0 -> {
+                map[position] = InfoAboutTVShowFragment.newInstance()
+                return map[position]!!
+            }
+            1 -> {
+                map[position] = CastTVShowFragment.newInstance()
+                return map[position]!!
+            }
         }
-        return null;
-
+        throw IllegalArgumentException("Number cant exceed 1")
     }
 
-
-    @Override
-    public int getCount() {
-        return 2;
+    override fun getCount(): Int {
+        return 2
     }
 
-    public Fragment function(int position) {
-        return map.get(position);
+    fun function(position: Int): Fragment? {
+        return map[position]
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "INFO";
-            case 1:
-                return "ACTORS";
+    override fun getPageTitle(position: Int): CharSequence? {
+        when (position) {
+            0 -> return "INFO"
+            1 -> return "ACTORS"
         }
-
-        return null;
+        return null
     }
 }

@@ -1,38 +1,12 @@
-package com.meghdut.upsilent.models;
+package com.meghdut.upsilent.models
 
-import java.io.Serializable;
+import java.io.Serializable
 
 /**
  * Created by Meghdut Mandal on 09/02/17.
  */
-
-public class TVShowsCreaters implements Serializable{
-
-    private int id;
-    private String name;
-    private String profile_path;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getProfile_path() {
-        return profile_path;
-    }
-
-    public void setProfile_path(String profile_path) {
-        this.profile_path = profile_path;
-    }
+class TVShowsCreaters : Serializable {
+    var id = 0
+    var name: String? = null
+    var profile_path: String? = null
 }

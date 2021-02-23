@@ -1,91 +1,71 @@
-package com.meghdut.upsilent.adapters;
+package com.meghdut.upsilent.adapters
 
-import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.meghdut.upsilent.AboutTVShowActivity;
-import com.meghdut.upsilent.utils.IntentConstants;
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.models.TVShow;
-import com.meghdut.upsilent.network.URLConstants;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
+import android.app.Activity
+import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.AboutTVShowActivity
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.models.TVShow
+import com.meghdut.upsilent.network.URLConstants
+import com.meghdut.upsilent.utils.IntentConstants
+import com.squareup.picasso.Picasso
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 31/03/17.
  */
-
-public class RecyclerAdapterSearchTvShows extends RecyclerView.Adapter<RecyclerAdapterSearchTvShows.ViewHolder> {
-    Context mContext;
-    private ArrayList<TVShow> mTvShows;
-
-    public RecyclerAdapterSearchTvShows(ArrayList<TVShow> searchedShows, Context context) {
-        mContext = context;
-        mTvShows = searchedShows;
+class RecyclerAdapterSearchTvShows(private val mTvShows: ArrayList<TVShow>?, var mContext: Context) : RecyclerView.Adapter<RecyclerAdapterSearchTvShows.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.search_tvshow_list_item, parent, false)
+        return ViewHolder(v)
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_tvshow_list_item, parent, false);
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (mTvShows != null) {
-            holder.name.setText(mTvShows.get(position).getTitle());
-            Picasso.get().load(URLConstants.IMAGE_BASE_URL + mTvShows.get(position).getPosterPath()).into(holder.thumbnailImage);
-            if (mTvShows.get(position).getDate().length() >= 5) {
-                String date = mTvShows.get(position).getDate().substring(0, 4);
-                holder.releaseDate.setText(date);
+            holder.name.text = mTvShows[position].title
+            Picasso.get().load(URLConstants.IMAGE_BASE_URL + mTvShows[position].posterPath).into(holder.thumbnailImage)
+            if (mTvShows[position].date.length >= 5) {
+                val date = mTvShows[position].date.substring(0, 4)
+                holder.releaseDate.text = date
             }
-            String rating = Double.toString(mTvShows.get(position).getRating());
-            holder.rating.setText(rating);
-            holder.cv.setOnClickListener(v -> {
-                Intent intent = new Intent();
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, holder.thumbnailImage, holder.thumbnailImage.getTransitionName()).toBundle();
-                intent.setClass(mContext, AboutTVShowActivity.class);
-                intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, mTvShows.get(position).getId());
-                intent.putExtra(IntentConstants.INTENT_KEY_POSTER_PATH, mTvShows.get(position).getPosterPath());
-                intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_NAME, mTvShows.get(position).getTitle());
-                mContext.startActivity(intent, bundle);
-            });
+            val rating = mTvShows[position].rating.toString()
+            holder.rating.text = rating
+            holder.cv.setOnClickListener { v: View? ->
+                val intent = Intent()
+                val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity, holder.thumbnailImage, holder.thumbnailImage.transitionName).toBundle()
+                intent.setClass(mContext, AboutTVShowActivity::class.java)
+                intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, mTvShows[position].id)
+                intent.putExtra(IntentConstants.INTENT_KEY_POSTER_PATH, mTvShows[position].posterPath)
+                intent.putExtra(IntentConstants.INTENT_KEY_TVSHOW_NAME, mTvShows[position].title)
+                mContext.startActivity(intent, bundle)
+            }
         }
-
     }
 
-    @Override
-    public int getItemCount() {
-        return mTvShows.size();
+    override fun getItemCount(): Int {
+        return mTvShows!!.size
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        ImageView thumbnailImage;
-        TextView name;
-        TextView releaseDate;
-        TextView rating;
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var cv: CardView = itemView.findViewById(R.id.cardView)
+        var thumbnailImage: ImageView
+        var name: TextView
+        var releaseDate: TextView
+        var rating: TextView
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            cv = itemView.findViewById(R.id.cardView);
-            thumbnailImage = itemView.findViewById(R.id.thumbnailImageView);
-            name = itemView.findViewById(R.id.nameTextView);
-            releaseDate = itemView.findViewById(R.id.releaseDateTextView);
-            rating = itemView.findViewById(R.id.ratingTextView);
+        init {
+            thumbnailImage = itemView.findViewById(R.id.thumbnailImageView)
+            name = itemView.findViewById(R.id.nameTextView)
+            releaseDate = itemView.findViewById(R.id.releaseDateTextView)
+            rating = itemView.findViewById(R.id.ratingTextView)
         }
     }
 }

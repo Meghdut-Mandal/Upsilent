@@ -40,19 +40,14 @@ public class CastMovieFragment extends Fragment {
     }
 
     public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                movieCastMain = (ArrayList<Cast>) args.getSerializable("MOVIE_CAST");
+        getActivity().runOnUiThread(() -> {
+            movieCastMain = (ArrayList<Cast>) args.getSerializable("MOVIE_CAST");
 
-                recyclerViewAdapterMovieCast = new RecyclerViewAdapterMovieCast(movieCastMain, context);
-                recyclerView.setAdapter(recyclerViewAdapterMovieCast);
+            recyclerViewAdapterMovieCast = new RecyclerViewAdapterMovieCast(movieCastMain, context);
+            recyclerView.setAdapter(recyclerViewAdapterMovieCast);
 
-                LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                recyclerView.setLayoutManager(verticalManager);
-
-            }
-
+            LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(verticalManager);
 
         });
     }

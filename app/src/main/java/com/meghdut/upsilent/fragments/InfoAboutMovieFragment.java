@@ -30,7 +30,6 @@ public class InfoAboutMovieFragment extends Fragment {
     private TextView abouFilmTextView;
     private TextView releasedTextView;
     private TextView budgetTextView;
-    private TextView seeAlltextViewMovieInfofragment;
     private TextView noReviewMovieTextView;
     private TextView noSimilarMoviesTextView;
     private TextView revenueTextView;
@@ -75,7 +74,7 @@ public class InfoAboutMovieFragment extends Fragment {
         noSimilarMoviesTextView = v.findViewById(R.id.noSimilarMoviesTextView);
         trailorsRecyclerView = v.findViewById(R.id.trailorsRecyclerView);
         similarMoviesRecyclerView = v.findViewById(R.id.similarMoviesRecyclerView);
-        seeAlltextViewMovieInfofragment = v.findViewById(R.id.seeAllTextViewMovieInfoFragment);
+        TextView seeAlltextViewMovieInfofragment = v.findViewById(R.id.seeAllTextViewMovieInfoFragment);
         seeAlltextViewMovieInfofragment.setOnClickListener(v1 -> infoAboutMovieFragmentListener.onSeeAllSimilarMoviesClicked());
         return v;
     }
@@ -93,45 +92,40 @@ public class InfoAboutMovieFragment extends Fragment {
     }
 
     public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (args.getBoolean("INFO")) {
-                    abouFilmTextView.setText(args.getString("OVERVIEW"));
-                    String releaseDate = dateGenerator(args.getString("RELEASE_DATE"));
-                    releasedTextView.setText(releaseDate);
-                    String budget = "£" + String.valueOf(args.getLong("BUDGET"));
-                    budgetTextView.setText(budget);
-                    String revenue = "£" + String.valueOf(args.getLong("REVENUE"));
-                    revenueTextView.setText(revenue);
-                    mainTrailerMoviesThumbnails = (ArrayList<Trailer>) args.getSerializable("TRAILER_THUMBNAILS");
-                    if (mainTrailerMoviesThumbnails.size() == 0) {
-                        noReviewMovieTextView.setVisibility(View.VISIBLE);
-                        noReviewMovieTextView.setText("No Trailers are currently available.");
-                    } else {
-                        recyclerAdapterMovieTrailer = new RecyclerAdapterMovieTrailer(mainTrailerMoviesThumbnails, context);
-                        LinearLayoutManager HorizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                        trailorsRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
-                        trailorsRecyclerView.setLayoutManager(HorizontalManager);
-                        trailorsRecyclerView.setAdapter(recyclerAdapterMovieTrailer);
-                    }
-
-                } else if (args.getBoolean("SIMILAR")) {
-                    mainSimilarMovies = (ArrayList<Movie>) args.getSerializable("SIMILAR_MOVIES");
-                    if (mainSimilarMovies.size() == 0) {
-                        noSimilarMoviesTextView.setVisibility(View.VISIBLE);
-                        noSimilarMoviesTextView.setText("No Similar Movies are currently available.");
-                    } else {
-                        recyclerAdapterSimilarMovies = new RecyclerAdapterSimilarMovies(mainSimilarMovies, context);
-                        LinearLayoutManager HorizontalManager1 = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                        similarMoviesRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
-                        similarMoviesRecyclerView.setLayoutManager(HorizontalManager1);
-                        similarMoviesRecyclerView.setAdapter(recyclerAdapterSimilarMovies);
-                    }
+        getActivity().runOnUiThread(() -> {
+            if (args.getBoolean("INFO")) {
+                abouFilmTextView.setText(args.getString("OVERVIEW"));
+                String releaseDate = dateGenerator(args.getString("RELEASE_DATE"));
+                releasedTextView.setText(releaseDate);
+                String budget = "£" + args.getLong("BUDGET");
+                budgetTextView.setText(budget);
+                String revenue = "£" + args.getLong("REVENUE");
+                revenueTextView.setText(revenue);
+                mainTrailerMoviesThumbnails = (ArrayList<Trailer>) args.getSerializable("TRAILER_THUMBNAILS");
+                if (mainTrailerMoviesThumbnails.size() == 0) {
+                    noReviewMovieTextView.setVisibility(View.VISIBLE);
+                    noReviewMovieTextView.setText("No Trailers are currently available.");
+                } else {
+                    recyclerAdapterMovieTrailer = new RecyclerAdapterMovieTrailer(mainTrailerMoviesThumbnails, context);
+                    LinearLayoutManager HorizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                    trailorsRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
+                    trailorsRecyclerView.setLayoutManager(HorizontalManager);
+                    trailorsRecyclerView.setAdapter(recyclerAdapterMovieTrailer);
                 }
 
+            } else if (args.getBoolean("SIMILAR")) {
+                mainSimilarMovies = (ArrayList<Movie>) args.getSerializable("SIMILAR_MOVIES");
+                if (mainSimilarMovies.size() == 0) {
+                    noSimilarMoviesTextView.setVisibility(View.VISIBLE);
+                    noSimilarMoviesTextView.setText("No Similar Movies are currently available.");
+                } else {
+                    recyclerAdapterSimilarMovies = new RecyclerAdapterSimilarMovies(mainSimilarMovies, context);
+                    LinearLayoutManager HorizontalManager1 = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+                    similarMoviesRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
+                    similarMoviesRecyclerView.setLayoutManager(HorizontalManager1);
+                    similarMoviesRecyclerView.setAdapter(recyclerAdapterSimilarMovies);
+                }
             }
-
 
         });
     }

@@ -31,7 +31,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MoviesFragment extends Fragment {
-    private RecyclerView recyclerView;
     private MovieResponse[] allMovies;
     private RecyclerViewAdapterMain recyclerViewAdapterMain;
 
@@ -39,9 +38,9 @@ public class MoviesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_movies, container, false);
-        recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView);
+        RecyclerView recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView);
         allMovies = new MovieResponse[4];
-        recyclerViewAdapterMain = new RecyclerViewAdapterMain(allMovies, getActivity());
+        recyclerViewAdapterMain = new  RecyclerViewAdapterMain(allMovies, getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(recyclerViewAdapterMain);
         return v;

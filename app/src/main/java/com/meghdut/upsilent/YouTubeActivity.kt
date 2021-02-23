@@ -1,102 +1,48 @@
-package com.meghdut.upsilent;
+package com.meghdut.upsilent
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Bundle
+import com.google.android.youtube.player.YouTubeBaseActivity
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayer.PlaybackEventListener
+import com.google.android.youtube.player.YouTubePlayer.PlayerStateChangeListener
+import com.google.android.youtube.player.YouTubePlayerView
+import com.meghdut.upsilent.network.URLConstants
 
-import com.meghdut.upsilent.network.URLConstants;
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-
-public class YouTubeActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
-    String key;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_you_tube_acitivity);
-
-        YouTubePlayerView youTubePlayerView = findViewById(R.id.youTubePlayer);
-        youTubePlayerView.initialize(URLConstants.YOUTUBE_VIDEO_PLAYER_API_KEY, this);
-
-        Intent intent = getIntent();
-        key = intent.getStringExtra("VIDEO_KEY");
+class YouTubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListener {
+    private var key: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_you_tube_acitivity)
+        val youTubePlayerView: YouTubePlayerView = findViewById(R.id.youTubePlayer)
+        youTubePlayerView.initialize(URLConstants.YOUTUBE_VIDEO_PLAYER_API_KEY, this)
+        val intent = intent
+        key = intent.getStringExtra("VIDEO_KEY")
     }
 
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
-        youTubePlayer.setPlaybackEventListener(playbackEventListener);
-
+    override fun onInitializationSuccess(provider: YouTubePlayer.Provider, youTubePlayer: YouTubePlayer, b: Boolean) {
+        youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener)
+        youTubePlayer.setPlaybackEventListener(playbackEventListener)
         if (!b) {
-            youTubePlayer.cueVideo(key);
+            youTubePlayer.cueVideo(key)
         }
-
     }
 
-    private YouTubePlayer.PlaybackEventListener playbackEventListener = new YouTubePlayer.PlaybackEventListener() {
-        @Override
-        public void onPlaying() {
-
-        }
-
-        @Override
-        public void onPaused() {
-
-        }
-
-        @Override
-        public void onStopped() {
-
-        }
-
-        @Override
-        public void onBuffering(boolean b) {
-
-        }
-
-        @Override
-        public void onSeekTo(int i) {
-
-        }
-    };
-
-    private YouTubePlayer.PlayerStateChangeListener playerStateChangeListener = new YouTubePlayer.PlayerStateChangeListener() {
-        @Override
-        public void onLoading() {
-
-        }
-
-        @Override
-        public void onLoaded(String s) {
-
-        }
-
-        @Override
-        public void onAdStarted() {
-
-        }
-
-        @Override
-        public void onVideoStarted() {
-
-        }
-
-        @Override
-        public void onVideoEnded() {
-
-        }
-
-        @Override
-        public void onError(YouTubePlayer.ErrorReason errorReason) {
-
-        }
-    };
-
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
+    private val playbackEventListener: PlaybackEventListener = object : PlaybackEventListener {
+        override fun onPlaying() {}
+        override fun onPaused() {}
+        override fun onStopped() {}
+        override fun onBuffering(b: Boolean) {}
+        override fun onSeekTo(i: Int) {}
     }
+    private val playerStateChangeListener: PlayerStateChangeListener = object : PlayerStateChangeListener {
+        override fun onLoading() {}
+        override fun onLoaded(s: String) {}
+        override fun onAdStarted() {}
+        override fun onVideoStarted() {}
+        override fun onVideoEnded() {}
+        override fun onError(errorReason: YouTubePlayer.ErrorReason) {}
+    }
+
+    override fun onInitializationFailure(provider: YouTubePlayer.Provider, youTubeInitializationResult: YouTubeInitializationResult) {}
 }

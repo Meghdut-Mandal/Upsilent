@@ -1,193 +1,128 @@
-package com.meghdut.upsilent;
+package com.meghdut.upsilent
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.adapters.RecyclerAdapterSeeAllTvshows
+import com.meghdut.upsilent.models.TVShow
+import com.meghdut.upsilent.network.ApiService
+import com.meghdut.upsilent.network.TVShowResponse
+import com.meghdut.upsilent.network.URLConstants
+import com.meghdut.upsilent.utils.AppUtil.dpToPx
+import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener
+import com.meghdut.upsilent.utils.GridSpacingItemDecoration
+import com.meghdut.upsilent.utils.SpacesItemDecoration
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
-import android.transition.Slide;
-import android.view.Gravity;
-
-import com.meghdut.upsilent.adapters.RecyclerAdapterSeeAllTvshows;
-import com.meghdut.upsilent.models.TVShow;
-import com.meghdut.upsilent.network.ApiService;
-import com.meghdut.upsilent.network.TVShowResponse;
-import com.meghdut.upsilent.network.URLConstants;
-import com.meghdut.upsilent.utils.AppUtil;
-import com.meghdut.upsilent.utils.EndlessRecyclerViewScrollListener;
-import com.meghdut.upsilent.utils.GridSpacingItemDecoration;
-import com.meghdut.upsilent.utils.SpacesItemDecoration;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class SeeAllTVShowsActivity extends AppCompatActivity {
-
-    private EndlessRecyclerViewScrollListener scrollListener;
-    RecyclerView recyclerView;
-    RecyclerAdapterSeeAllTvshows recyclerAdapterSeeAllTvshows;
-    ArrayList<TVShow> tvShows;
-    String tvShowType;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.see_all_activity_tvshows);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Slide slide = new Slide(Gravity.BOTTOM);
-        getWindow().setEnterTransition(slide);
-        getWindow().setAllowEnterTransitionOverlap(true);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Intent intent = getIntent();
-        tvShows = (ArrayList<TVShow>) intent.getSerializableExtra("ABCD");
-        tvShowType = intent.getStringExtra("TVSHOW_TYPE");
-
-        setTitle(tvShowType);
-
-        recyclerView = findViewById(R.id.seeAllActivityRecyclerViewTVShows);
-
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-
-        recyclerAdapterSeeAllTvshows = new RecyclerAdapterSeeAllTvshows(tvShows, this);
-        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, AppUtil.dpToPx(this, 16), true));
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(recyclerAdapterSeeAllTvshows);
-
-        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadmoreData(page);
+class SeeAllTVShowsActivity : AppCompatActivity() {
+    var recyclerAdapterSeeAllTvshows: RecyclerAdapterSeeAllTvshows? = null
+    var tvShows: ArrayList<TVShow>? = null
+    private var tvShowType: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.see_all_activity_tvshows)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        val slide = Slide(Gravity.BOTTOM)
+        window.enterTransition = slide
+        window.allowEnterTransitionOverlap = true
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        val intent = intent
+        tvShows = intent.getSerializableExtra("ABCD") as ArrayList<TVShow>?
+        tvShowType = intent.getStringExtra("TVSHOW_TYPE")
+        title = tvShowType
+        val recyclerView = findViewById<RecyclerView>(R.id.seeAllActivityRecyclerViewTVShows)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        recyclerView.addItemDecoration(SpacesItemDecoration(spacingInPixels))
+        recyclerAdapterSeeAllTvshows = RecyclerAdapterSeeAllTvshows(tvShows, this)
+        val gridLayoutManager = GridLayoutManager(this, 2, RecyclerView.VERTICAL, false)
+        recyclerView.addItemDecoration(GridSpacingItemDecoration(2, dpToPx(this, 16), true))
+        recyclerView.layoutManager = gridLayoutManager
+        recyclerView.adapter = recyclerAdapterSeeAllTvshows
+        val scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                loadmoreData(page)
             }
-        };
-
-        recyclerView.addOnScrollListener(scrollListener);
+        }
+        recyclerView.addOnScrollListener(scrollListener)
     }
 
-    private void loadmoreData(int page) {
-
-        Retrofit retrofit = new Retrofit.Builder()
+    private fun loadmoreData(page: Int) {
+        val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.TVSHOW_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService service = retrofit.create(ApiService.class);
-        if (tvShowType.equals("Airing Today")) {
-
-            Call<TVShowResponse> call = service.getAiringToday(URLConstants.API_KEY, page);
-            call.enqueue(new Callback<TVShowResponse>() {
-                @Override
-                public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
+                .build()
+        val service = retrofit.create(ApiService::class.java)
+        if (tvShowType == "Airing Today") {
+            val call = service.getAiringToday(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<TVShowResponse> {
+                override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
                     //Log.i("ABC2", "FUN");
-                    ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                    if (tvShowList == null) {
-                        return;
+                    val tvShowList = response.body()!!.tvShows
+                    for (obj in tvShowList) {
+                        tvShows!!.add(obj)
                     }
-                    for (TVShow obj : tvShowList) {
-                        tvShows.add(obj);
-                    }
-                    recyclerAdapterSeeAllTvshows.notifyDataSetChanged();
+                    recyclerAdapterSeeAllTvshows!!.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (tvShowType.equals("On Air")) {
-            Call<TVShowResponse> call = service.getOnAir(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<TVShowResponse>() {
-                @Override
-                public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
-                    ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                    if (tvShowList == null) {
-                        return;
+                override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+            })
+        } else if (tvShowType == "On Air") {
+            val call = service.getOnAir(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<TVShowResponse> {
+                override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
+                    val tvShowList = response.body()!!.tvShows
+                    for (obj in tvShowList) {
+                        tvShows!!.add(obj)
                     }
-                    for (TVShow obj : tvShowList) {
-                        tvShows.add(obj);
-                    }
-                    recyclerAdapterSeeAllTvshows.notifyDataSetChanged();
+                    recyclerAdapterSeeAllTvshows!!.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (tvShowType.equals("Popular Shows")) {
-            Call<TVShowResponse> call = service.getPopular(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<TVShowResponse>() {
-                @Override
-                public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
+                override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+            })
+        } else if (tvShowType == "Popular Shows") {
+            val call = service.getPopular(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<TVShowResponse> {
+                override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
                     //Log.i("ABC2", "FUN");
-                    ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                    if (tvShowList == null) {
-                        return;
+                    val tvShowList = response.body()!!.tvShows
+                    for (obj in tvShowList) {
+                        tvShows!!.add(obj)
                     }
-                    for (TVShow obj : tvShowList) {
-                        tvShows.add(obj);
-                    }
-                    recyclerAdapterSeeAllTvshows.notifyDataSetChanged();
+                    recyclerAdapterSeeAllTvshows!!.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-                }
-            });
-        } else if (tvShowType.equals("Top Rated Shows")) {
-            Call<TVShowResponse> call = service.getTopRated(URLConstants.API_KEY, page);
-
-            call.enqueue(new Callback<TVShowResponse>() {
-                @Override
-                public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
+                override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+            })
+        } else if (tvShowType == "Top Rated Shows") {
+            val call = service.getTopRated(URLConstants.API_KEY, page)
+            call.enqueue(object : Callback<TVShowResponse> {
+                override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
                     //Log.i("ABC2", "FUN");
-                    ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                    if (tvShowList == null) {
-                        return;
+                    val tvShowList = response.body()!!.tvShows
+                    for (obj in tvShowList) {
+                        tvShows!!.add(obj)
                     }
-                    for (TVShow obj : tvShowList) {
-                        tvShows.add(obj);
-                    }
-                    recyclerAdapterSeeAllTvshows.notifyDataSetChanged();
+                    recyclerAdapterSeeAllTvshows!!.notifyDataSetChanged()
                 }
 
-                @Override
-                public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-                }
-            });
-
+                override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+            })
         }
-
-
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
-
-
-
-
-

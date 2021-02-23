@@ -1,61 +1,54 @@
-package com.meghdut.upsilent.utils;
+package com.meghdut.upsilent.utils
 
-import android.graphics.Rect;
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
+import android.graphics.Rect
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 /**
  * Created by Meghdut Mandal on 01/02/20.
  */
-public class HorizontalItemDecoration extends RecyclerView.ItemDecoration {
+class HorizontalItemDecoration : ItemDecoration {
+    private var horizontalSpacing = 0
+    private var start = 0
+    private var middle = 0
+    private var end = 0
+    private val type: Int
 
-    private int horizontalSpacing;
-
-    private int start;
-    private int middle;
-    private int end;
-
-
-    private int type;
-
-    public HorizontalItemDecoration(int horizontalSpacing) {
-        this.horizontalSpacing = horizontalSpacing;
-        type = 0;
+    constructor(horizontalSpacing: Int) {
+        this.horizontalSpacing = horizontalSpacing
+        type = 0
     }
 
-    public HorizontalItemDecoration(int start, int middle, int end) {
-        this.start = start;
-        this.end = end;
-        this.middle = middle;
-
-        type = 1;
+    constructor(start: Int, middle: Int, end: Int) {
+        this.start = start
+        this.end = end
+        this.middle = middle
+        type = 1
     }
 
-    @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                               RecyclerView.State state) {
-        int position = parent.getChildAdapterPosition(view);
-
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
+                                state: RecyclerView.State) {
+        val position = parent.getChildAdapterPosition(view)
         if (type == 0) {
-            if (position != state.getItemCount() - 1) {
-                outRect.right = horizontalSpacing;
+            if (position != state.itemCount - 1) {
+                outRect.right = horizontalSpacing
             }
-        }else if (type == 1){
+        } else if (type == 1) {
             //First Item
-            if (position == 0){
-                outRect.left = start;
-                if (state.getItemCount() == 1){
+            if (position == 0) {
+                outRect.left = start
+                if (state.itemCount == 1) {
                     //Single Item
-                    outRect.right = end;
-                }else{
-                    outRect.right = middle;
+                    outRect.right = end
+                } else {
+                    outRect.right = middle
                 }
-            }else if (position == state.getItemCount() - 1){
+            } else if (position == state.itemCount - 1) {
                 //Last Item
-                outRect.right =end;
-            }else{
-                outRect.right = middle;
+                outRect.right = end
+            } else {
+                outRect.right = middle
             }
         }
     }

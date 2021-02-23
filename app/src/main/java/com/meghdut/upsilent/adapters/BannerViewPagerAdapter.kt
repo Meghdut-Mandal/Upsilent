@@ -1,62 +1,47 @@
-package com.meghdut.upsilent.adapters;
+package com.meghdut.upsilent.adapters
 
-import android.content.Context;
-
-import androidx.viewpager.widget.PagerAdapter;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import com.meghdut.upsilent.R;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.viewpager.widget.PagerAdapter
+import com.meghdut.upsilent.R
+import com.squareup.picasso.Picasso
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 19/01/17.
  */
-
-public class BannerViewPagerAdapter extends PagerAdapter {
-
-    Context mContext;
-    private List<String> mAllBannerImageFullLinks;
-
-    public BannerViewPagerAdapter(Context context, ArrayList<String> allBannerImageFullLinks) {
-        mContext = context;
-        mAllBannerImageFullLinks = allBannerImageFullLinks;
+class BannerViewPagerAdapter(var mContext: Context, allBannerImageFullLinks: ArrayList<String>) : PagerAdapter() {
+    private var mAllBannerImageFullLinks: List<String>
+    override fun getCount(): Int {
+        return mAllBannerImageFullLinks.size
     }
 
-    @Override
-    public int getCount() {
-        return mAllBannerImageFullLinks.size();
+    override fun isViewFromObject(view: View, `object`: Any): Boolean {
+        return view === `object` as LinearLayout
     }
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return (view == (LinearLayout) object);
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        container.removeView(`object` as LinearLayout)
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val v = LayoutInflater.from(container.context).inflate(R.layout.banner_image_view_layout, container, false)
+        val bannerImage = v.findViewById<ImageView>(R.id.bannerImage)
+        Picasso.get().load(mAllBannerImageFullLinks[position]).into(bannerImage)
+        container.addView(v)
+        return v
     }
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View v = LayoutInflater.from(container.getContext()).inflate(R.layout.banner_image_view_layout, container, false);
-        ImageView bannerImage = v.findViewById(R.id.bannerImage);
-        Picasso.get().load(mAllBannerImageFullLinks.get(position)).into(bannerImage);
-        container.addView(v);
-        return v;
+    fun refreshBannerUrls(list: List<String>) {
+        mAllBannerImageFullLinks = list
+        notifyDataSetChanged()
     }
 
-    public void refreshBannerUrls(List<String> list) {
-        this.mAllBannerImageFullLinks = list;
-        notifyDataSetChanged();
+    init {
+        mAllBannerImageFullLinks = allBannerImageFullLinks
     }
 }
-

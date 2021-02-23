@@ -1,92 +1,32 @@
-package com.meghdut.upsilent.network;
+package com.meghdut.upsilent.network
 
-import com.meghdut.upsilent.models.Genre;
-import com.meghdut.upsilent.models.Video;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName
+import com.meghdut.upsilent.models.Genre
+import com.meghdut.upsilent.models.Video
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 24/01/17.
  */
-
-public class AboutMovieResponse {
-
+class AboutMovieResponse {
     @SerializedName("overview")
-    private String overview;
+    var overview: String = ""
 
     @SerializedName("release_date")
-    private String releaseDate;
+    var releaseDate: String = ""
 
     @SerializedName("runtime")
-    private int runTimeOfMovie;
+    var runTimeOfMovie = 0
 
     @SerializedName("budget")
-    private long budget;
+    var budget: Long = 0
 
     @SerializedName("revenue")
-    private long revenue;
+    var revenue: Long = 0
 
     @SerializedName("genres")
-    ArrayList<Genre> genres;
+    var genres: ArrayList<Genre> = arrayListOf()
 
     @SerializedName("videos")
-    private Video video;
-
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public int getRunTimeOfMovie() {
-        return runTimeOfMovie;
-    }
-
-    public void setRunTimeOfMovie(int runTimeOfMovie) {
-        this.runTimeOfMovie = runTimeOfMovie;
-    }
-
-    public long getBudget() {
-        return budget;
-    }
-
-    public void setBudget(long budget) {
-        this.budget = budget;
-    }
-
-    public long getRevenue() {
-        return revenue;
-    }
-
-    public void setRevenue(long revenue) {
-        this.revenue = revenue;
-    }
-
-    public ArrayList<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(ArrayList<Genre> genres) {
-        this.genres = genres;
-    }
-
-    public Video getVideo() {
-        return video;
-    }
-
-    public void setVideo(Video video) {
-        this.video = video;
-    }
+    var video: Video? = null
 }

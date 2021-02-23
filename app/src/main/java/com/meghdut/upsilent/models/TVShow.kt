@@ -1,71 +1,24 @@
-package com.meghdut.upsilent.models;
+package com.meghdut.upsilent.models
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Created by Meghdut Mandal on 08/02/17.
  */
-
-public class TVShow implements Serializable{
+class TVShow : Serializable {
     @SerializedName("name")
-    private
-    String title;
+    var title: String = ""
 
     @SerializedName("first_air_date")
-    private
-    String date;
+    var date: String = ""
 
     @SerializedName("vote_average")
-    private
-    double rating;
+    var rating = 0.0
 
     @SerializedName("poster_path")
-    private
-    String posterPath;
+    var posterPath: String = ""
 
     @SerializedName("id")
-    private
-    int id;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    var id = 0
 }

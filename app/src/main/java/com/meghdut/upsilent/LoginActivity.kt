@@ -1,9 +1,9 @@
 package com.meghdut.upsilent
 
+//import com.meghdut.upsilent.utils.navigateToMainActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.chibatching.kotpref.Kotpref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -12,7 +12,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.meghdut.upsilent.db.LocalDb
-//import com.meghdut.upsilent.utils.navigateToMainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
