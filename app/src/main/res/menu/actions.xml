@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<item
+    android:id="@+id/quality"
+    android:icon="@drawable/ic_quality"
+    android:iconTint="@color/black"
+    android:title="Select Track"
+    app:showAsAction="always" />
+
+</menu>

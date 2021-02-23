@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "984084324960",
+    "project_id": "upsilent-e9893",
+    "storage_bucket": "upsilent-e9893.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984084324960:android:9deed096880bf789f89905",
+        "android_client_info": {
+          "package_name": "com.meghdut.upsilent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984084324960-h88ddve6q997lod0l7eo3hcurleklln2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meghdut.upsilent",
+            "certificate_hash": "c7681486fc996d045bc0245768368e5b7f2710bb"
+          }
+        },
+        {
+          "client_id": "984084324960-in7ubbmeqqfikvvam3b8d7m8r37dhjoq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBccF5hcD6MVgIFqJJbNoLigc-IzWrVx7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984084324960-in7ubbmeqqfikvvam3b8d7m8r37dhjoq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
