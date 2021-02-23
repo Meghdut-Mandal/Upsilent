@@ -123,7 +123,7 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
             override fun onPrepareLoad(placeHolderDrawable: Drawable) {}
         })
         movieNameTextView = findViewById(R.id.nameTextView)
-        movieNameTextView.setText(movieName)
+        movieNameTextView.text = movieName
         genreTextView = findViewById(R.id.genreTextView)
         releaseDateTextView = findViewById(R.id.releaseDateTextView)
         runTimeTextView = findViewById(R.id.runTimeTextView)
@@ -131,14 +131,14 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
         mViewPager = findViewById(R.id.container)
         tabLayout.addTab(tabLayout.newTab())
         tabLayout.addTab(tabLayout.newTab())
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL)
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         fragmentPager = FragmentPager(supportFragmentManager)
-        mViewPager.setAdapter(fragmentPager)
+        mViewPager.adapter = fragmentPager
         tabLayout.setupWithViewPager(mViewPager)
-        mViewPager.setOffscreenPageLimit(3)
+        mViewPager.offscreenPageLimit = 3
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mViewPager.setCurrentItem(tab.position)
+                mViewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -183,8 +183,8 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
                 aboutMovieResponse!!.video = response.body()!!.video
                 obj = response.body()!!.video!!
                 obj.trailers = obj.trailers
-                if (aboutMovieResponse!!.releaseDate.length >= 5) releaseDateTextView.setText(aboutMovieResponse!!.releaseDate.substring(0, 4))
-                runTimeTextView.setText((aboutMovieResponse!!.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse!!.runTimeOfMovie % 60 + "mins")
+                if (aboutMovieResponse!!.releaseDate.length >= 5) releaseDateTextView.text = aboutMovieResponse!!.releaseDate.substring(0, 4)
+                runTimeTextView.text = (aboutMovieResponse!!.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse!!.runTimeOfMovie % 60 + "mins"
                 val bundle = Bundle()
                 bundle.putBoolean("INFO", true)
                 bundle.putString("OVERVIEW", aboutMovieResponse!!.overview)

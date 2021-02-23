@@ -54,37 +54,37 @@ class ExoPlayerActivity : AppCompatActivity() {
                 if ("0.25x" == qualityRange[which]) {
                     val param = PlaybackParameters(0.25f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("0.25x")
+                    textSpeed.text = "0.25x"
                 }
                 if ("0.5x" == qualityRange[which]) {
                     val param = PlaybackParameters(0.5f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("0.5x")
+                    textSpeed.text = "0.5x"
                 } else if ("0.75x" == qualityRange[which]) {
                     val param = PlaybackParameters(0.75f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("0.75x")
+                    textSpeed.text = "0.75x"
                 }
                 if ("1x" == qualityRange[which]) {
                     val param = PlaybackParameters(1.0f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("1x")
+                    textSpeed.text = "1x"
                 } else if ("1.25x" == qualityRange[which]) {
                     val param = PlaybackParameters(1.25f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("1.25x")
+                    textSpeed.text = "1.25x"
                 } else if ("1.5x" == qualityRange[which]) {
                     val param = PlaybackParameters(1.5f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("1.5x")
+                    textSpeed.text = "1.5x"
                 } else if ("1.75x" == qualityRange[which]) {
                     val param = PlaybackParameters(1.75f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("1.75x")
+                    textSpeed.text = "1.75x"
                 } else if ("2x" == qualityRange[which]) {
                     val param = PlaybackParameters(2.0f)
                     simpleExoPlayer!!.setPlaybackParameters(param)
-                    textSpeed.setText("2x")
+                    textSpeed.text = "2x"
                 }
             }
             builder.show()

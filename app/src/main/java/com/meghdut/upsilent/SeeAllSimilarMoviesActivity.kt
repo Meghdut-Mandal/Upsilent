@@ -1,6 +1,8 @@
 package com.meghdut.upsilent
 
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -39,9 +41,9 @@ class SeeAllSimilarMoviesActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        //Slide slide = new Slide(Gravity.BOTTOM);
-        //getWindow().setEnterTransition(slide);
-        //getWindow().setAllowEnterTransitionOverlap(true);
+//        val  slide =  Slide(Gravity.BOTTOM);
+//        window.enterTransition = slide;
+//        window.allowEnterTransitionOverlap = true;
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         val intent = intent

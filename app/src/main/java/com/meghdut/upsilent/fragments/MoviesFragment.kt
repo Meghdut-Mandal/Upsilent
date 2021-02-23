@@ -1,144 +1,93 @@
-package com.meghdut.upsilent.fragments;
+package com.meghdut.upsilent.fragments
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.meghdut.upsilent.models.Movie;
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.adapters.RecyclerViewAdapterMain;
-import com.meghdut.upsilent.network.ApiService;
-import com.meghdut.upsilent.network.MovieResponse;
-import com.meghdut.upsilent.network.URLConstants;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.adapters.RecyclerViewAdapterMain
+import com.meghdut.upsilent.network.ApiService
+import com.meghdut.upsilent.network.MovieResponse
+import com.meghdut.upsilent.network.URLConstants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Created by Meghdut Mandal on 06/02/17.
  */
-
-public class MoviesFragment extends Fragment {
-    private MovieResponse[] allMovies;
-    private RecyclerViewAdapterMain recyclerViewAdapterMain;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_movies, container, false);
-        RecyclerView recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView);
-        allMovies = new MovieResponse[4];
-        recyclerViewAdapterMain = new  RecyclerViewAdapterMain(allMovies, getActivity());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(recyclerViewAdapterMain);
-        return v;
+class MoviesFragment : Fragment() {
+    private lateinit var allMovies: ArrayList<MovieResponse>
+    private var recyclerViewAdapterMain: RecyclerViewAdapterMain? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_movies, container, false)
+        val recyclerView: RecyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
+        allMovies = arrayListOf()
+        recyclerViewAdapterMain = RecyclerViewAdapterMain(allMovies, requireActivity())
+        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        recyclerView.adapter = recyclerViewAdapterMain
+        return v
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Retrofit retrofit = new Retrofit.Builder()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.MOVIE_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService service = retrofit.create(ApiService.class);
-        Call<MovieResponse> call = service.getPopularMovies(URLConstants.API_KEY, 1);
-
-        call.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                ArrayList<Movie> movieList = response.body().getMovies();
-                MovieResponse popularMovies = new MovieResponse();
-                if (movieList == null) {
-                    return;
-                }
-                popularMovies.setMovies(movieList);
-                allMovies[0] = popularMovies;
-                recyclerViewAdapterMain.notifyDataSetChanged();
+                .build()
+        val service = retrofit.create(ApiService::class.java)
+        val call = service.getPopularMovies(URLConstants.API_KEY, 1)
+        call.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                val movieList = response.body()!!.movies
+                val popularMovies = MovieResponse()
+                popularMovies.movies = movieList
+                allMovies.add(popularMovies)
+                recyclerViewAdapterMain!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<MovieResponse> call1 = service.getNowPlayingMovies(URLConstants.API_KEY, 1);
-
-        call1.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                ArrayList<Movie> movieList = response.body().getMovies();
-                MovieResponse nowPlayingMovies = new MovieResponse();
-                if (movieList == null) {
-                    return;
-                }
-                nowPlayingMovies.setMovies(movieList);
-                allMovies[1] = nowPlayingMovies;
-                recyclerViewAdapterMain.notifyDataSetChanged();
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+        })
+        val call1 = service.getNowPlayingMovies(URLConstants.API_KEY, 1)
+        call1.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                val movieList = response.body()!!.movies
+                val nowPlayingMovies = MovieResponse()
+                nowPlayingMovies.movies = movieList
+                allMovies.add(nowPlayingMovies)
+                recyclerViewAdapterMain!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-
-
-        Call<MovieResponse> call2 = service.getTopRatedMovies(URLConstants.API_KEY, 1);
-
-        call2.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                ArrayList<Movie> movieList = response.body().getMovies();
-                MovieResponse topRatedMovies = new MovieResponse();
-                if (movieList == null) {
-                    return;
-                }
-                topRatedMovies.setMovies(movieList);
-                allMovies[2] = topRatedMovies;
-                recyclerViewAdapterMain.notifyDataSetChanged();
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+        })
+        val call2 = service.getTopRatedMovies(URLConstants.API_KEY, 1)
+        call2.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                val movieList = response.body()!!.movies
+                val topRatedMovies = MovieResponse()
+                topRatedMovies.movies = movieList
+                allMovies.add(topRatedMovies)
+                recyclerViewAdapterMain!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<MovieResponse> call3 = service.getUpcomingMovies(URLConstants.API_KEY, 1);
-
-        call3.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                ArrayList<Movie> movieList = response.body().getMovies();
-                MovieResponse upcomingMovies = new MovieResponse();
-                if (movieList == null) {
-                    return;
-                }
-                upcomingMovies.setMovies(movieList);
-                allMovies[3] = upcomingMovies;
-                recyclerViewAdapterMain.notifyDataSetChanged();
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+        })
+        val call3 = service.getUpcomingMovies(URLConstants.API_KEY, 1)
+        call3.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                val movieList = response.body()!!.movies
+                val upcomingMovies = MovieResponse()
+                upcomingMovies.movies = movieList
+                allMovies.add(upcomingMovies)
+                recyclerViewAdapterMain!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
+        })
     }
 }

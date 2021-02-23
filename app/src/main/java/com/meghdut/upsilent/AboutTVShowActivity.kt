@@ -68,8 +68,8 @@ class AboutTVShowActivity : AppCompatActivity() {
         allBannerImageFullLinks = ArrayList()
         mBannerViewPager = findViewById(R.id.tvShowpager)
         radioGroupTvShow = findViewById(R.id.radioGroupTvShow)
-        bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks!!)
-        mBannerViewPager.setAdapter(bannerViewPagerAdapter)
+        bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks)
+        mBannerViewPager.adapter = bannerViewPagerAdapter
         mBannerViewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 if (currentPage == 0 && doFirst) {
@@ -106,7 +106,7 @@ class AboutTVShowActivity : AppCompatActivity() {
                     val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
                     collapsingToolbarLayout.setBackgroundColor(color)
                     collapsingToolbarLayout.setContentScrimColor(color)
-                    tabLayout!!.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
+                    tabLayout.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
                 }
                 poster!!.setImageBitmap(bitmap)
             }
@@ -115,19 +115,19 @@ class AboutTVShowActivity : AppCompatActivity() {
             override fun onPrepareLoad(placeHolderDrawable: Drawable) {}
         })
         tvShowNameTextView = findViewById(R.id.tvShowNameTextView)
-        tvShowNameTextView.setText(tvShowName)
+        tvShowNameTextView.text = tvShowName
         genreTextView = findViewById(R.id.tvShowgenreTextView)
         tabLayout = findViewById(R.id.tabLayout)
         mViewPager = findViewById(R.id.container)
         tabLayout.addTab(tabLayout.newTab())
         tabLayout.addTab(tabLayout.newTab())
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL)
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         tvShowFragmentPager = TVShowFragmentPager(supportFragmentManager)
-        mViewPager.setAdapter(tvShowFragmentPager)
+        mViewPager.adapter = tvShowFragmentPager
         tabLayout.setupWithViewPager(mViewPager)
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mViewPager.setCurrentItem(tab.position)
+                mViewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -144,13 +144,13 @@ class AboutTVShowActivity : AppCompatActivity() {
                 val bannerImagesLinksList = response.body()!!.bannerImageLinks
                 for (i in bannerImagesLinksList.indices) {
                     if (i < 8) {
-                        allBannerImageFullLinks!!.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
+                        allBannerImageFullLinks.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
                         val radioButton = RadioButton(applicationContext)
                         radioButton.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                         radioGroupTvShow.addView(radioButton)
                     } else break
                 }
-                bannerViewPagerAdapter!!.refreshBannerUrls(allBannerImageFullLinks!!)
+                bannerViewPagerAdapter.refreshBannerUrls(allBannerImageFullLinks)
             }
 
             override fun onFailure(call: Call<ImageResponse>, t: Throwable) {}
@@ -185,8 +185,8 @@ class AboutTVShowActivity : AppCompatActivity() {
                 bundle.putSerializable("CREATORS", aboutTVShowResponse.tvShowsCreaters)
                 Log.i("DUBAI", obj.trailers.toString())
                 bundle.putSerializable("TRAILER_THUMBNAILS", obj.trailers)
-                val obj = tvShowFragmentPager!!.function(0) as InfoAboutTVShowFragment?
-                obj!!.setUIArguements(bundle)
+                val obj = tvShowFragmentPager.function(0) as InfoAboutTVShowFragment?
+                obj?.setUIArguements(bundle)
             }
 
             override fun onFailure(call: Call<AboutTVShowResponse>, t: Throwable) {}
@@ -197,8 +197,8 @@ class AboutTVShowActivity : AppCompatActivity() {
                 val tvShowCast = response.body()!!.cast
                 val args = Bundle()
                 args.putSerializable("TV_SHOW_CAST", tvShowCast)
-                val obj1 = tvShowFragmentPager!!.function(1) as CastTVShowFragment?
-                obj1!!.setUIArguements(args)
+                val obj1 = tvShowFragmentPager.function(1) as CastTVShowFragment?
+                obj1?.setUIArguements(args)
             }
 
             override fun onFailure(call: Call<CreditResponse>, t: Throwable) {}

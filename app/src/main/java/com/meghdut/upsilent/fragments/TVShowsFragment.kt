@@ -1,144 +1,103 @@
-package com.meghdut.upsilent.fragments;
+package com.meghdut.upsilent.fragments
 
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.models.TVShow;
-import com.meghdut.upsilent.adapters.RecyclerViewAdapterTVShow;
-import com.meghdut.upsilent.network.ApiService;
-import com.meghdut.upsilent.network.TVShowResponse;
-import com.meghdut.upsilent.network.URLConstants;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.adapters.RecyclerViewAdapterTVShow
+import com.meghdut.upsilent.network.ApiService
+import com.meghdut.upsilent.network.TVShowResponse
+import com.meghdut.upsilent.network.URLConstants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Created by Meghdut Mandal on 07/02/17.
  */
-
-public class TVShowsFragment extends Fragment {
-    RecyclerView recyclerView;
-    TVShowResponse[] allTvShows;
-    RecyclerViewAdapterTVShow recyclerViewAdapterTVShow;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_tvshows, container, false);
-
-        recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView);
-        allTvShows = new TVShowResponse[4];
-
-        recyclerViewAdapterTVShow = new RecyclerViewAdapterTVShow(allTvShows, getActivity());
-        recyclerView.setAdapter(recyclerViewAdapterTVShow);
-
-        LinearLayoutManager verticalManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(verticalManager);
-
-        Retrofit retrofit = new Retrofit.Builder()
+class TVShowsFragment : Fragment() {
+    lateinit var recyclerView: RecyclerView
+    lateinit var allTvShows: Array<TVShowResponse?>
+    var recyclerViewAdapterTVShow: RecyclerViewAdapterTVShow? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_tvshows, container, false)
+        recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
+        allTvShows = arrayOfNulls(4)
+        recyclerViewAdapterTVShow = RecyclerViewAdapterTVShow(allTvShows, requireActivity())
+        recyclerView.adapter = recyclerViewAdapterTVShow
+        val verticalManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = verticalManager
+        val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.TVSHOW_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService service = retrofit.create(ApiService.class);
-        Call<TVShowResponse> call = service.getAiringToday(URLConstants.API_KEY, 1);
-
-        call.enqueue(new Callback<TVShowResponse>() {
-            @Override
-            public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
-                ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                TVShowResponse airingtoday = new TVShowResponse();
+                .build()
+        val service = retrofit.create(ApiService::class.java)
+        val call = service.getAiringToday(URLConstants.API_KEY, 1)
+        call.enqueue(object : Callback<TVShowResponse> {
+            override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
+                val tvShowList = response.body()!!.tvShows
+                val airingtoday = TVShowResponse()
                 if (tvShowList == null) {
-                    return;
+                    return
                 }
-                airingtoday.setTvShows(tvShowList);
-                allTvShows[0] = airingtoday;
-                recyclerViewAdapterTVShow.notifyDataSetChanged();
+                airingtoday.tvShows = tvShowList
+                allTvShows[0] = airingtoday
+                recyclerViewAdapterTVShow!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<TVShowResponse> call1 = service.getOnAir(URLConstants.API_KEY, 1);
-
-        call1.enqueue(new Callback<TVShowResponse>() {
-            @Override
-            public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
-                ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                TVShowResponse onAir = new TVShowResponse();
+            override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+        })
+        val call1 = service.getOnAir(URLConstants.API_KEY, 1)
+        call1.enqueue(object : Callback<TVShowResponse> {
+            override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
+                val tvShowList = response.body()!!.tvShows
+                val onAir = TVShowResponse()
                 if (tvShowList == null) {
-                    return;
+                    return
                 }
-                onAir.setTvShows(tvShowList);
-                allTvShows[1] = onAir;
-                recyclerViewAdapterTVShow.notifyDataSetChanged();
+                onAir.tvShows = tvShowList
+                allTvShows[1] = onAir
+                recyclerViewAdapterTVShow!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<TVShowResponse> call2 = service.getPopular(URLConstants.API_KEY, 1);
-
-        call2.enqueue(new Callback<TVShowResponse>() {
-            @Override
-            public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
-                ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                TVShowResponse popular = new TVShowResponse();
+            override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+        })
+        val call2 = service.getPopular(URLConstants.API_KEY, 1)
+        call2.enqueue(object : Callback<TVShowResponse> {
+            override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
+                val tvShowList = response.body()!!.tvShows
+                val popular = TVShowResponse()
                 if (tvShowList == null) {
-                    return;
+                    return
                 }
-                popular.setTvShows(tvShowList);
-                allTvShows[2] = popular;
-                recyclerViewAdapterTVShow.notifyDataSetChanged();
+                popular.tvShows = tvShowList
+                allTvShows[2] = popular
+                recyclerViewAdapterTVShow!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-            }
-        });
-
-        Call<TVShowResponse> call3 = service.getTopRated(URLConstants.API_KEY, 1);
-
-        call3.enqueue(new Callback<TVShowResponse>() {
-            @Override
-            public void onResponse(Call<TVShowResponse> call, Response<TVShowResponse> response) {
-                ArrayList<TVShow> tvShowList = response.body().getTvShows();
-                TVShowResponse topRated = new TVShowResponse();
+            override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+        })
+        val call3 = service.getTopRated(URLConstants.API_KEY, 1)
+        call3.enqueue(object : Callback<TVShowResponse> {
+            override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
+                val tvShowList = response.body()!!.tvShows
+                val topRated = TVShowResponse()
                 if (tvShowList == null) {
-                    return;
+                    return
                 }
-                topRated.setTvShows(tvShowList);
-                allTvShows[3] = topRated;
-                recyclerViewAdapterTVShow.notifyDataSetChanged();
+                topRated.tvShows = tvShowList
+                allTvShows[3] = topRated
+                recyclerViewAdapterTVShow!!.notifyDataSetChanged()
             }
 
-            @Override
-            public void onFailure(Call<TVShowResponse> call, Throwable t) {
-
-            }
-        });
-
-        return v;
+            override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
+        })
+        return v
     }
 }
-
-

@@ -1,54 +1,44 @@
-package com.meghdut.upsilent.fragments;
+package com.meghdut.upsilent.fragments
 
-import android.content.Context;
-import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.meghdut.upsilent.models.Cast;
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.adapters.RecyclerViewAdapterMovieCast;
-
-import java.util.ArrayList;
+import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.adapters.RecyclerViewAdapterMovieCast
+import com.meghdut.upsilent.models.Cast
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 10/02/17.
  */
-
-public class CastMovieFragment extends Fragment {
-    RecyclerView recyclerView;
-    RecyclerViewAdapterMovieCast recyclerViewAdapterMovieCast;
-    ArrayList<Cast> movieCastMain;
-    Context context;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        context = getActivity();
-        View v = inflater.inflate(R.layout.fragment_cast_movie, container, false);
-        recyclerView = v.findViewById(R.id.movieCastRecyclerview);
-        return v;
+class CastMovieFragment : Fragment() {
+    lateinit var recyclerView: RecyclerView
+    lateinit var recyclerViewAdapterMovieCast: RecyclerViewAdapterMovieCast
+    lateinit var movieCastMain: ArrayList<Cast>
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_cast_movie, container, false)
+        recyclerView = v.findViewById(R.id.movieCastRecyclerview)
+        return v
     }
 
-    public static CastMovieFragment newInstance() {
-        return new CastMovieFragment();
+    fun setUIArguements(args: Bundle) {
+        this.run {
+            movieCastMain = args.getSerializable("MOVIE_CAST") as ArrayList<Cast>
+            recyclerViewAdapterMovieCast = RecyclerViewAdapterMovieCast(movieCastMain, requireActivity())
+            recyclerView.adapter = recyclerViewAdapterMovieCast
+            val verticalManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            recyclerView.layoutManager = verticalManager
+        }
     }
 
-    public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(() -> {
-            movieCastMain = (ArrayList<Cast>) args.getSerializable("MOVIE_CAST");
-
-            recyclerViewAdapterMovieCast = new RecyclerViewAdapterMovieCast(movieCastMain, context);
-            recyclerView.setAdapter(recyclerViewAdapterMovieCast);
-
-            LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(verticalManager);
-
-        });
+    companion object {
+        fun newInstance(): CastMovieFragment {
+            return CastMovieFragment()
+        }
     }
 }

@@ -1,145 +1,100 @@
-package com.meghdut.upsilent.fragments;
+package com.meghdut.upsilent.fragments
 
-import android.content.Context;
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.meghdut.upsilent.R;
-import com.meghdut.upsilent.models.TVShowsCreaters;
-import com.meghdut.upsilent.models.Trailer;
-import com.meghdut.upsilent.adapters.RecyclerAdapterTVShowTrailer;
-import com.meghdut.upsilent.utils.AppUtil;
-import com.meghdut.upsilent.utils.HorizontalItemDecoration;
-
-import java.util.ArrayList;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.meghdut.upsilent.R
+import com.meghdut.upsilent.adapters.RecyclerAdapterTVShowTrailer
+import com.meghdut.upsilent.models.TVShowsCreaters
+import com.meghdut.upsilent.models.Trailer
+import com.meghdut.upsilent.utils.AppUtil.dpToPx
+import com.meghdut.upsilent.utils.HorizontalItemDecoration
+import java.util.*
 
 /**
  * Created by Meghdut Mandal on 09/02/17.
  */
-
-public class InfoAboutTVShowFragment extends Fragment {
-
-    TextView aboutTvShowTextView;
-    TextView firstAirDateTextView;
-    TextView lastAirDateTextView;
-    TextView createdByTextView;
-    TextView showTypeTextView;
-    TextView showStatusTextView;
-    TextView noReviewTextView;
-    ArrayList<Trailer> mainTrailerTvShowsThumbnails;
-    RecyclerView trailorsRecyclerView;
-    Context context;
-    RecyclerAdapterTVShowTrailer recyclerAdapterTVShowTrailer;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_info_tvshow, container, false);
-        context = getActivity();
-        aboutTvShowTextView = v.findViewById(R.id.aboutTvShowTextView);
-        firstAirDateTextView = v.findViewById(R.id.firstAirDateTextView);
-        lastAirDateTextView = v.findViewById(R.id.lastAirDateTextView);
-        createdByTextView = v.findViewById(R.id.createdByTextView);
-        showStatusTextView = v.findViewById(R.id.showStatusTextView);
-        showTypeTextView = v.findViewById(R.id.showTypeTextView);
-        noReviewTextView = v.findViewById(R.id.noTVTrailerTextView);
-        trailorsRecyclerView = v.findViewById(R.id.trailorsTvShowRecyclerView);
-
-        return v;
+class InfoAboutTVShowFragment : Fragment() {
+    lateinit var aboutTvShowTextView: TextView
+    lateinit var firstAirDateTextView: TextView
+    lateinit var lastAirDateTextView: TextView
+    lateinit var createdByTextView: TextView
+    lateinit var showTypeTextView: TextView
+    lateinit var showStatusTextView: TextView
+    lateinit var noReviewTextView: TextView
+    lateinit var mainTrailerTvShowsThumbnails: ArrayList<Trailer>
+    lateinit var trailorsRecyclerView: RecyclerView
+//    var context: Context? = null
+    var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = inflater.inflate(R.layout.fragment_info_tvshow, container, false)
+//        context = activity
+        aboutTvShowTextView = v.findViewById(R.id.aboutTvShowTextView)
+        firstAirDateTextView = v.findViewById(R.id.firstAirDateTextView)
+        lastAirDateTextView = v.findViewById(R.id.lastAirDateTextView)
+        createdByTextView = v.findViewById(R.id.createdByTextView)
+        showStatusTextView = v.findViewById(R.id.showStatusTextView)
+        showTypeTextView = v.findViewById(R.id.showTypeTextView)
+        noReviewTextView = v.findViewById(R.id.noTVTrailerTextView)
+        trailorsRecyclerView = v.findViewById(R.id.trailorsTvShowRecyclerView)
+        return v
     }
 
-
-    public static InfoAboutTVShowFragment newInstance() {
-        return new InfoAboutTVShowFragment();
-    }
-
-    public void setUIArguements(final Bundle args) {
-        getActivity().runOnUiThread(() -> {
-            aboutTvShowTextView.setText(args.getString("OVERVIEW"));
-            String firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"));
-            firstAirDateTextView.setText(firstAirDate);
-            String lastAirDate = dateGenerator(args.getString("LAST_AIR_DATE"));
-            lastAirDateTextView.setText(lastAirDate);
-            ArrayList<TVShowsCreaters> obj = (ArrayList<TVShowsCreaters>) args.getSerializable("CREATORS");
-            for (int i = 0; i < obj.size(); i++) {
-                if (i < obj.size() - 1)
-                    createdByTextView.append(obj.get(i).getName() + ", ");
-                else
-                    createdByTextView.append(obj.get(i).getName());
-
+    fun setUIArguements(args: Bundle) {
+        requireActivity().runOnUiThread {
+            aboutTvShowTextView.text = args.getString("OVERVIEW")
+            val firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"))
+            firstAirDateTextView.text = firstAirDate
+            val lastAirDate = dateGenerator(args.getString("LAST_AIR_DATE"))
+            lastAirDateTextView.text = lastAirDate
+            val obj = args.getSerializable("CREATORS") as ArrayList<TVShowsCreaters>?
+            for (i in obj!!.indices) {
+                if (i < obj.size - 1) createdByTextView.append(obj[i].name + ", ") else createdByTextView.append(obj[i].name)
             }
-            showTypeTextView.setText(args.getString("SHOW_TYPE"));
-            showStatusTextView.setText(args.getString("STATUS"));
-
-            mainTrailerTvShowsThumbnails = (ArrayList<Trailer>) args.getSerializable("TRAILER_THUMBNAILS");
-            if (mainTrailerTvShowsThumbnails.size() == 0) {
-                noReviewTextView.setVisibility(View.VISIBLE);
-                noReviewTextView.setText("No Trailers are currently available.");
+            showTypeTextView.text = args.getString("SHOW_TYPE")
+            showStatusTextView.text = args.getString("STATUS")
+            mainTrailerTvShowsThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>
+            if (mainTrailerTvShowsThumbnails.size == 0) {
+                noReviewTextView.visibility = View.VISIBLE
+                noReviewTextView.text = "No Trailers are currently available."
             } else {
-                LinearLayoutManager HorizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-                trailorsRecyclerView.setLayoutManager(HorizontalManager);
-                trailorsRecyclerView.addItemDecoration(new HorizontalItemDecoration(AppUtil.dpToPx(context, 16), AppUtil.dpToPx(context, 6), AppUtil.dpToPx(context, 16)));
-                recyclerAdapterTVShowTrailer = new RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, context);
-                trailorsRecyclerView.setAdapter(recyclerAdapterTVShowTrailer);
+                val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                trailorsRecyclerView.layoutManager = HorizontalManager
+                trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                recyclerAdapterTVShowTrailer = RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, requireContext())
+                trailorsRecyclerView.adapter = recyclerAdapterTVShowTrailer
             }
-
-        });
-
+        }
     }
 
-    private String dateGenerator(String date) {
-        String month = date.substring(5, 7);
-        String ans = "";
-        switch (month) {
-            case "01":
-                ans = "January";
-                break;
-            case "02":
-                ans = "February";
-                break;
-            case "03":
-                ans = "March";
-                break;
-            case "04":
-                ans = "April";
-                break;
-            case "05":
-                ans = "May";
-                break;
-            case "06":
-                ans = "June";
-                break;
-            case "07":
-                ans = "July";
-                break;
-            case "08":
-                ans = "August";
-                break;
-            case "09":
-                ans = "September";
-                break;
-            case "10":
-                ans = "October";
-                break;
-            case "11":
-                ans = "November";
-                break;
-            case "12":
-                ans = "December";
-                break;
-
+    private fun dateGenerator(date: String?): String {
+        val month = date!!.substring(5, 7)
+        var ans = ""
+        when (month) {
+            "01" -> ans = "January"
+            "02" -> ans = "February"
+            "03" -> ans = "March"
+            "04" -> ans = "April"
+            "05" -> ans = "May"
+            "06" -> ans = "June"
+            "07" -> ans = "July"
+            "08" -> ans = "August"
+            "09" -> ans = "September"
+            "10" -> ans = "October"
+            "11" -> ans = "November"
+            "12" -> ans = "December"
         }
-        return (ans + " " + date.substring(8, 10) + "," + " " + date.substring(0, 4));
+        return ans + " " + date.substring(8, 10) + "," + " " + date.substring(0, 4)
+    }
+
+    companion object {
+        fun newInstance(): InfoAboutTVShowFragment {
+            return InfoAboutTVShowFragment()
+        }
     }
 }
-
-
