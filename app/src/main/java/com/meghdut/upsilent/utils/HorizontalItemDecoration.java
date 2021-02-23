@@ -16,6 +16,7 @@ public class HorizontalItemDecoration extends RecyclerView.ItemDecoration {
     private int middle;
     private int end;
 
+
     private int type;
 
     public HorizontalItemDecoration(int horizontalSpacing) {
