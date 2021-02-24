@@ -11,11 +11,12 @@
         android:icon="@drawable/drive_ic"
         android:title="Drive" />
     <item
-        android:id="@id/driveFragment"
-        android:icon="@drawable/admin_ic"
-        android:title="Settings" />
-    <item
         android:id="@id/downloadFragment"
         android:icon="@drawable/download_ic"
         android:title="Downloads" />
+    <item
+        android:id="@id/driveFragment"
+        android:icon="@drawable/admin_ic"
+        android:title="Settings" />
+
 </menu>

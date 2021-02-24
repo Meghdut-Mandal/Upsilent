@@ -28,11 +28,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onResume() {
+        super.onResume()
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title = getString(R.string.app_name)
         translucentV = findViewById(R.id.translucentV)
-        searchFB = findViewById(R.id.searchFAB)
         fabMovieSearch = findViewById(R.id.searchMovieFabButton)
         fabTvShowSearch = findViewById(R.id.searchTvShowFabButton)
         searchMovieTV = findViewById(R.id.searchMovieTV)
