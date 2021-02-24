@@ -19,7 +19,13 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
             .build()
     private val service = retrofit.create(ApiService::class.java)
 
-    val moviesLiveData = MutableLiveData<MovieResponse>()
+    val moviesLiveData = MutableLiveData<ArrayList<MovieResponse>>()
+
+    private fun addData(movieResponse: MovieResponse) {
+        val list = moviesLiveData.value ?: arrayListOf()
+        list.add(movieResponse)
+        moviesLiveData.postValue(list)
+    }
 
 
     fun loadData() {
@@ -29,18 +35,20 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
                 val movieList = response.body()!!.movies
                 val popularMovies = MovieResponse()
                 popularMovies.movies = movieList
-                moviesLiveData.postValue(popularMovies)
+                addData(popularMovies)
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
         })
+
+
         val call1 = service.getNowPlayingMovies(URLConstants.API_KEY, 1)
         call1.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val movieList = response.body()!!.movies
                 val nowPlayingMovies = MovieResponse()
                 nowPlayingMovies.movies = movieList
-                moviesLiveData.postValue(nowPlayingMovies)
+                addData(nowPlayingMovies)
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
@@ -51,7 +59,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
                 val movieList = response.body()!!.movies
                 val topRatedMovies = MovieResponse()
                 topRatedMovies.movies = movieList
-                moviesLiveData.postValue(topRatedMovies)
+                addData(topRatedMovies)
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
@@ -62,8 +70,9 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
                 val movieList = response.body()!!.movies
                 val upcomingMovies = MovieResponse()
                 upcomingMovies.movies = movieList
-                moviesLiveData.postValue(upcomingMovies)
+                addData(upcomingMovies)
             }
+
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
         })
     }

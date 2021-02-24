@@ -186,7 +186,7 @@ class AboutTVShowActivity : AppCompatActivity() {
                 Log.i("DUBAI", obj.trailers.toString())
                 bundle.putSerializable("TRAILER_THUMBNAILS", obj.trailers)
                 val obj = tvShowFragmentPager.function(0) as InfoAboutTVShowFragment?
-                obj?.setUIArguements(bundle)
+                obj?.setUIArguments(bundle)
             }
 
             override fun onFailure(call: Call<AboutTVShowResponse>, t: Throwable) {}

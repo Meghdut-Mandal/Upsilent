@@ -20,32 +20,20 @@ import java.util.*
  * Created by Meghdut Mandal on 09/02/17.
  */
 class InfoAboutTVShowFragment : Fragment() {
-    private lateinit var aboutTvShowTextView: TextView
-    private lateinit var firstAirDateTextView: TextView
-    private lateinit var lastAirDateTextView: TextView
-    private lateinit var createdByTextView: TextView
-    private lateinit var showTypeTextView: TextView
-    private lateinit var showStatusTextView: TextView
-    private lateinit var noReviewTextView: TextView
-    private lateinit var mainTrailerTvShowsThumbnails: ArrayList<Trailer>
-    private lateinit var trailorsRecyclerView: RecyclerView
-//    var context: Context? = null
-private var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_info_tvshow, container, false)
-//        context = activity
-        aboutTvShowTextView = v.findViewById(R.id.aboutTvShowTextView)
-        firstAirDateTextView = v.findViewById(R.id.firstAirDateTextView)
-        lastAirDateTextView = v.findViewById(R.id.lastAirDateTextView)
-        createdByTextView = v.findViewById(R.id.createdByTextView)
-        showStatusTextView = v.findViewById(R.id.showStatusTextView)
-        showTypeTextView = v.findViewById(R.id.showTypeTextView)
-        noReviewTextView = v.findViewById(R.id.noTVTrailerTextView)
-        trailorsRecyclerView = v.findViewById(R.id.trailorsTvShowRecyclerView)
-        return v
+        return inflater.inflate(R.layout.fragment_info_tvshow, container, false)
     }
 
-    fun setUIArguements(args: Bundle) {
+    fun setUIArguments(args: Bundle) {
+        val aboutTvShowTextView: TextView = requireView().findViewById(R.id.aboutTvShowTextView)
+        val firstAirDateTextView: TextView = requireView().findViewById(R.id.firstAirDateTextView)
+        val lastAirDateTextView: TextView = requireView().findViewById(R.id.lastAirDateTextView)
+        val createdByTextView: TextView = requireView().findViewById(R.id.createdByTextView)
+        val showTypeTextView: TextView = requireView().findViewById(R.id.showStatusTextView)
+        val showStatusTextView: TextView = requireView().findViewById(R.id.showTypeTextView)
+        val noReviewTextView: TextView = requireView().findViewById(R.id.noTVTrailerTextView)
+        val tailorsRecyclerView: RecyclerView = requireView().findViewById(R.id.trailorsTvShowRecyclerView)
+
         requireActivity().runOnUiThread {
             aboutTvShowTextView.text = args.getString("OVERVIEW")
             val firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"))
@@ -58,16 +46,16 @@ private var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
             }
             showTypeTextView.text = args.getString("SHOW_TYPE")
             showStatusTextView.text = args.getString("STATUS")
-            mainTrailerTvShowsThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>
+            val mainTrailerTvShowsThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>
             if (mainTrailerTvShowsThumbnails.size == 0) {
                 noReviewTextView.visibility = View.VISIBLE
                 noReviewTextView.text = "No Trailers are currently available."
             } else {
-                val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                trailorsRecyclerView.layoutManager = HorizontalManager
-                trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                recyclerAdapterTVShowTrailer = RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, requireContext())
-                trailorsRecyclerView.adapter = recyclerAdapterTVShowTrailer
+                val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                tailorsRecyclerView.layoutManager = linearLayoutManager
+                tailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                val recyclerAdapterTVShowTrailer = RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, requireContext())
+                tailorsRecyclerView.adapter = recyclerAdapterTVShowTrailer
             }
         }
     }

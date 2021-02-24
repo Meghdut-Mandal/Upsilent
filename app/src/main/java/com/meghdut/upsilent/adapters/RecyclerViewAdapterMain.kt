@@ -22,7 +22,7 @@ import com.meghdut.upsilent.utils.IntentConstants
 /**
  * Created by Meghdut Mandal on 07/01/17.
  */
-class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterMain.ViewHolder>(), OnRecyclerViewItemClickListener {
+class RecyclerViewAdapterMain(var mMovies: ArrayList<MovieResponse>, var mContext: Context) : RecyclerView.Adapter<RecyclerViewAdapterMain.ViewHolder>(), OnRecyclerViewItemClickListener {
     private var recyclerViewAdapter: RecyclerViewAdapter? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.activity_main_second, parent, false)

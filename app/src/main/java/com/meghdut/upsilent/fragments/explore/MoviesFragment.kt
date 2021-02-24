@@ -16,7 +16,6 @@ import com.meghdut.upsilent.network.MovieResponse
  * Created by Meghdut Mandal on 06/02/17.
  */
 class MoviesFragment : Fragment() {
-    private val allMovies: ArrayList<MovieResponse> = arrayListOf()
 
     private val moviesViewModel by lazy { ViewModelProvider(requireActivity()).get(MoviesViewModel::class.java) }
 
@@ -27,14 +26,16 @@ class MoviesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val recyclerView: RecyclerView = requireView().findViewById(R.id.activityMainVerticalRecyclerView)
-        val recyclerViewAdapterMain = RecyclerViewAdapterMain(allMovies, requireActivity())
+        val recyclerViewAdapterMain = RecyclerViewAdapterMain(arrayListOf(), requireActivity())
         recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recyclerView.adapter = recyclerViewAdapterMain
         moviesViewModel.moviesLiveData.observe(viewLifecycleOwner) {
-            allMovies.add(it)
+            recyclerViewAdapterMain.mMovies = it
             recyclerViewAdapterMain.notifyDataSetChanged()
         }
         moviesViewModel.loadData()
+
     }
+
 
 }
