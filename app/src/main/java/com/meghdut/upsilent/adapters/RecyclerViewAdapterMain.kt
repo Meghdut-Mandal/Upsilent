@@ -125,12 +125,9 @@ class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var movieType: TextView = itemView.findViewById(R.id.movieTypeTextView)
-        var horizontalRecyclerView: RecyclerView
-        var seeAlltextView: TextView = itemView.findViewById(R.id.seeAllTextView)
+        val movieType: TextView = itemView.findViewById(R.id.movieTypeTextView)
+        val horizontalRecyclerView: RecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal)
+        val seeAlltextView: TextView = itemView.findViewById(R.id.seeAllTextView)
 
-        init {
-            horizontalRecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal)
-        }
     }
 }

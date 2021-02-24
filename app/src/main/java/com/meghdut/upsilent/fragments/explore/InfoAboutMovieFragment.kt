@@ -70,38 +70,36 @@ class InfoAboutMovieFragment : Fragment() {
     }
 
     fun setUIArguements(args: Bundle) {
-        requireActivity().runOnUiThread {
-            if (args.getBoolean("INFO")) {
-                abouFilmTextView.text = args.getString("OVERVIEW")
-                val releaseDate = dateGenerator(args.getString("RELEASE_DATE"))
-                releasedTextView.text = releaseDate
-                val budget = "£" + args.getLong("BUDGET")
-                budgetTextView.text = budget
-                val revenue = "£" + args.getLong("REVENUE")
-                revenueTextView.text = revenue
-                mainTrailerMoviesThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>?
-                if (mainTrailerMoviesThumbnails!!.size == 0) {
-                    noReviewMovieTextView.visibility = View.VISIBLE
-                    noReviewMovieTextView.text = "No Trailers are currently available."
-                } else {
-                    recyclerAdapterMovieTrailer = RecyclerAdapterMovieTrailer(mainTrailerMoviesThumbnails, requireContext())
-                    val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                    trailorsRecyclerView.layoutManager = HorizontalManager
-                    trailorsRecyclerView.adapter = recyclerAdapterMovieTrailer
-                }
-            } else if (args.getBoolean("SIMILAR")) {
-                mainSimilarMovies = args.getSerializable("SIMILAR_MOVIES") as ArrayList<Movie>?
-                if (mainSimilarMovies!!.size == 0) {
-                    noSimilarMoviesTextView.visibility = View.VISIBLE
-                    noSimilarMoviesTextView.text = "No Similar Movies are currently available."
-                } else {
-                    recyclerAdapterSimilarMovies = RecyclerAdapterSimilarMovies(mainSimilarMovies, requireContext())
-                    val HorizontalManager1 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    similarMoviesRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                    similarMoviesRecyclerView.layoutManager = HorizontalManager1
-                    similarMoviesRecyclerView.adapter = recyclerAdapterSimilarMovies
-                }
+        if (args.getBoolean("INFO")) {
+            abouFilmTextView.text = args.getString("OVERVIEW")
+            val releaseDate = dateGenerator(args.getString("RELEASE_DATE"))
+            releasedTextView.text = releaseDate
+            val budget = "£" + args.getLong("BUDGET")
+            budgetTextView.text = budget
+            val revenue = "£" + args.getLong("REVENUE")
+            revenueTextView.text = revenue
+            mainTrailerMoviesThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>?
+            if (mainTrailerMoviesThumbnails!!.size == 0) {
+                noReviewMovieTextView.visibility = View.VISIBLE
+                noReviewMovieTextView.text = "No Trailers are currently available."
+            } else {
+                recyclerAdapterMovieTrailer = RecyclerAdapterMovieTrailer(mainTrailerMoviesThumbnails, requireContext())
+                val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                trailorsRecyclerView.layoutManager = HorizontalManager
+                trailorsRecyclerView.adapter = recyclerAdapterMovieTrailer
+            }
+        } else if (args.getBoolean("SIMILAR")) {
+            mainSimilarMovies = args.getSerializable("SIMILAR_MOVIES") as ArrayList<Movie>?
+            if (mainSimilarMovies!!.size == 0) {
+                noSimilarMoviesTextView.visibility = View.VISIBLE
+                noSimilarMoviesTextView.text = "No Similar Movies are currently available."
+            } else {
+                recyclerAdapterSimilarMovies = RecyclerAdapterSimilarMovies(mainSimilarMovies, requireContext())
+                val HorizontalManager1 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                similarMoviesRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                similarMoviesRecyclerView.layoutManager = HorizontalManager1
+                similarMoviesRecyclerView.adapter = recyclerAdapterSimilarMovies
             }
         }
     }
