@@ -13,7 +13,6 @@ import com.meghdut.upsilent.adapters.MainFragmentPager
 
 
 class ExploreFragment : Fragment() {
-    private lateinit var containerVP: ViewPager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,12 +22,12 @@ class ExploreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title= getString(R.string.app_name)
+        toolbar.title = getString(R.string.app_name)
         val mainTL = view.findViewById<TabLayout>(R.id.mainTL)
         mainTL.addTab(mainTL.newTab())
         mainTL.addTab(mainTL.newTab())
         val mainFragmentPager = MainFragmentPager(childFragmentManager)
-        containerVP = view.findViewById(R.id.containerVP)
+        val containerVP = view.findViewById<ViewPager>(R.id.containerVP)
         containerVP.adapter = mainFragmentPager
         mainTL.setupWithViewPager(containerVP)
         mainTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

@@ -9,7 +9,7 @@ import com.meghdut.upsilent.fragments.explore.TVShowsFragment
 /**
  * Created by Meghdut Mandal on 06/02/17.
  */
-class MainFragmentPager(fm: FragmentManager?) : FragmentPagerAdapter(fm!!) {
+class MainFragmentPager(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getCount(): Int {
         return 2
     }
