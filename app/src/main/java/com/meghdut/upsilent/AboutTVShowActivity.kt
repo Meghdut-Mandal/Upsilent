@@ -20,8 +20,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.meghdut.upsilent.adapters.BannerViewPagerAdapter
 import com.meghdut.upsilent.adapters.TVShowFragmentPager
-import com.meghdut.upsilent.fragments.CastTVShowFragment
-import com.meghdut.upsilent.fragments.InfoAboutTVShowFragment
+import com.meghdut.upsilent.fragments.explore.CastTVShowFragment
+import com.meghdut.upsilent.fragments.explore.InfoAboutTVShowFragment
 import com.meghdut.upsilent.models.Video
 import com.meghdut.upsilent.network.*
 import com.meghdut.upsilent.utils.IntentConstants
@@ -39,7 +39,7 @@ class AboutTVShowActivity : AppCompatActivity() {
     private lateinit var mBannerViewPager: ViewPager
     private lateinit var bannerViewPagerAdapter: BannerViewPagerAdapter
     private lateinit var allBannerImageFullLinks: ArrayList<String>
-    var poster: ImageView? = null
+    lateinit var poster: ImageView
     private lateinit var tabLayout: TabLayout
     private lateinit var mViewPager: ViewPager
     private lateinit var tvShowFragmentPager: TVShowFragmentPager
@@ -108,7 +108,7 @@ class AboutTVShowActivity : AppCompatActivity() {
                     collapsingToolbarLayout.setContentScrimColor(color)
                     tabLayout.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
                 }
-                poster!!.setImageBitmap(bitmap)
+                poster.setImageBitmap(bitmap)
             }
 
             override fun onBitmapFailed(e: Exception, errorDrawable: Drawable) {}

@@ -43,12 +43,11 @@ class RecyclerAdapterMovieTrailer(private val mTrailerMoviesArraylist: ArrayList
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var trailerCardView: CardView
+        var trailerCardView: CardView = itemView.findViewById(R.id.trailerCardView)
         var trailerThumbnail: ImageView = itemView.findViewById(R.id.trailerThumbnail)
         var trailerThumbnailName: TextView
 
         init {
-            trailerCardView = itemView.findViewById(R.id.trailerCardView)
             trailerThumbnailName = itemView.findViewById(R.id.trailerThumbnailName)
         }
     }

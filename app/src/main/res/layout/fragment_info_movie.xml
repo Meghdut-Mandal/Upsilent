@@ -144,7 +144,8 @@
             android:fontFamily="@font/proximanova_regular_webfont"
             android:padding="7dp"
             android:text="See all"
-            android:textColor="@color/subtext1" />
+            android:textColor="@color/subtext1"
+            android:focusable="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/similarMoviesRecyclerView"

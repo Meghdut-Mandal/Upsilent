@@ -1,4 +1,4 @@
-package com.meghdut.upsilent.fragments
+package com.meghdut.upsilent.fragments.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,17 +20,17 @@ import java.util.*
  * Created by Meghdut Mandal on 09/02/17.
  */
 class InfoAboutTVShowFragment : Fragment() {
-    lateinit var aboutTvShowTextView: TextView
-    lateinit var firstAirDateTextView: TextView
-    lateinit var lastAirDateTextView: TextView
-    lateinit var createdByTextView: TextView
-    lateinit var showTypeTextView: TextView
-    lateinit var showStatusTextView: TextView
-    lateinit var noReviewTextView: TextView
-    lateinit var mainTrailerTvShowsThumbnails: ArrayList<Trailer>
-    lateinit var trailorsRecyclerView: RecyclerView
+    private lateinit var aboutTvShowTextView: TextView
+    private lateinit var firstAirDateTextView: TextView
+    private lateinit var lastAirDateTextView: TextView
+    private lateinit var createdByTextView: TextView
+    private lateinit var showTypeTextView: TextView
+    private lateinit var showStatusTextView: TextView
+    private lateinit var noReviewTextView: TextView
+    private lateinit var mainTrailerTvShowsThumbnails: ArrayList<Trailer>
+    private lateinit var trailorsRecyclerView: RecyclerView
 //    var context: Context? = null
-    var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
+private var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_info_tvshow, container, false)
 //        context = activity

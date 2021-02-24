@@ -17,10 +17,10 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.meghdut.upsilent.adapters.BannerViewPagerAdapter
 import com.meghdut.upsilent.adapters.FragmentPager
-import com.meghdut.upsilent.fragments.CastMovieFragment
-import com.meghdut.upsilent.fragments.InfoAboutMovieFragment
-import com.meghdut.upsilent.fragments.InfoAboutMovieFragment.InfoAboutMovieFragmentListener
-import com.meghdut.upsilent.fragments.ReviewsFragment
+import com.meghdut.upsilent.fragments.explore.CastMovieFragment
+import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment
+import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment.InfoAboutMovieFragmentListener
+import com.meghdut.upsilent.fragments.explore.ReviewsFragment
 import com.meghdut.upsilent.models.*
 import com.meghdut.upsilent.network.*
 import com.meghdut.upsilent.utils.IntentConstants
@@ -46,13 +46,11 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
     lateinit var genreTextView: TextView
     lateinit var releaseDateTextView: TextView
     lateinit var runTimeTextView: TextView
-    lateinit var obj: Video
     var doFirst = true
     lateinit var radioGroup: RadioGroup
     private var movie_id = 0
     private lateinit var movieName: String
     var mainSimilarMovies = ArrayList<Movie>()
-    var aboutMovieResponse: AboutMovieResponse? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_movie)
@@ -76,7 +74,7 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
         //mViewPager.setAdapter(mSectionsPagerAdapter);
         val mBannerViewPager = findViewById<ViewPager>(R.id.pager)
         radioGroup = findViewById(R.id.radioGroup)
-        bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks!!)
+        bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks)
         mBannerViewPager.adapter = bannerViewPagerAdapter
         mBannerViewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -114,7 +112,7 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
                     val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
                     collapsingToolbarLayout.setBackgroundColor(color)
                     collapsingToolbarLayout.setContentScrimColor(color)
-                    tabLayout!!.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
+                    tabLayout.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
                 }
                 poster.setImageBitmap(bitmap)
             }
@@ -155,13 +153,13 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
                 val bannerImagesLinksList = response.body()!!.bannerImageLinks
                 for (i in bannerImagesLinksList.indices) {
                     if (i < 8) {
-                        allBannerImageFullLinks!!.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
+                        allBannerImageFullLinks.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
                         val radioButton = RadioButton(applicationContext)
                         radioButton.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                         radioGroup.addView(radioButton)
                     } else break
                 }
-                bannerViewPagerAdapter!!.refreshBannerUrls(allBannerImageFullLinks!!)
+                bannerViewPagerAdapter.refreshBannerUrls(allBannerImageFullLinks)
             }
 
             override fun onFailure(call: Call<ImageResponse>, t: Throwable) {}
@@ -173,24 +171,24 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
                 for (i in genres.indices) {
                     if (i < genres.size - 1) genreTextView.append(genres[i].name + ", ") else genreTextView.append(genres[i].name)
                 }
-                aboutMovieResponse = AboutMovieResponse()
-                aboutMovieResponse!!.overview = response.body()!!.overview
-                aboutMovieResponse!!.releaseDate = response.body()!!.releaseDate
-                aboutMovieResponse!!.runTimeOfMovie = response.body()!!.runTimeOfMovie
-                aboutMovieResponse!!.budget = response.body()!!.budget
-                aboutMovieResponse!!.revenue = response.body()!!.revenue
-                aboutMovieResponse!!.genres = response.body()!!.genres
-                aboutMovieResponse!!.video = response.body()!!.video
-                obj = response.body()!!.video!!
+                val aboutMovieResponse = AboutMovieResponse()
+                aboutMovieResponse.overview = response.body()!!.overview
+                aboutMovieResponse.releaseDate = response.body()!!.releaseDate
+                aboutMovieResponse.runTimeOfMovie = response.body()!!.runTimeOfMovie
+                aboutMovieResponse.budget = response.body()!!.budget
+                aboutMovieResponse.revenue = response.body()!!.revenue
+                aboutMovieResponse.genres = response.body()!!.genres
+                aboutMovieResponse.video = response.body()!!.video
+                val obj = response.body()!!.video!!
                 obj.trailers = obj.trailers
-                if (aboutMovieResponse!!.releaseDate.length >= 5) releaseDateTextView.text = aboutMovieResponse!!.releaseDate.substring(0, 4)
-                runTimeTextView.text = (aboutMovieResponse!!.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse!!.runTimeOfMovie % 60 + "mins"
+                if (aboutMovieResponse.releaseDate.length >= 5) releaseDateTextView.text = aboutMovieResponse.releaseDate.substring(0, 4)
+                runTimeTextView.text = (aboutMovieResponse.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse.runTimeOfMovie % 60 + "mins"
                 val bundle = Bundle()
                 bundle.putBoolean("INFO", true)
-                bundle.putString("OVERVIEW", aboutMovieResponse!!.overview)
-                bundle.putString("RELEASE_DATE", aboutMovieResponse!!.releaseDate)
-                bundle.putLong("BUDGET", aboutMovieResponse!!.budget)
-                bundle.putLong("REVENUE", aboutMovieResponse!!.revenue)
+                bundle.putString("OVERVIEW", aboutMovieResponse.overview)
+                bundle.putString("RELEASE_DATE", aboutMovieResponse.releaseDate)
+                bundle.putLong("BUDGET", aboutMovieResponse.budget)
+                bundle.putLong("REVENUE", aboutMovieResponse.revenue)
                 bundle.putSerializable("TRAILER_THUMBNAILS", obj.trailers)
                 val obj1 = fragmentPager.function(0) as InfoAboutMovieFragment
                 obj1.setUIArguements(bundle)

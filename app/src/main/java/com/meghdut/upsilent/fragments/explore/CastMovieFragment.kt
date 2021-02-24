@@ -1,6 +1,5 @@
-package com.meghdut.upsilent.fragments
+package com.meghdut.upsilent.fragments.explore
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +16,9 @@ import java.util.*
  * Created by Meghdut Mandal on 10/02/17.
  */
 class CastMovieFragment : Fragment() {
-    lateinit var recyclerView: RecyclerView
-    lateinit var recyclerViewAdapterMovieCast: RecyclerViewAdapterMovieCast
-    lateinit var movieCastMain: ArrayList<Cast>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapterMovieCast: RecyclerViewAdapterMovieCast
+    private lateinit var movieCastMain: ArrayList<Cast>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_cast_movie, container, false)
         recyclerView = v.findViewById(R.id.movieCastRecyclerview)

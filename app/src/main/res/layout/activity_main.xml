@@ -100,7 +100,7 @@
                 android:fontFamily="@font/proximanova_semibold_webfont"
                 android:text="Movies"
                 android:textColor="@color/text1"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:visibility="invisible" />
 
 

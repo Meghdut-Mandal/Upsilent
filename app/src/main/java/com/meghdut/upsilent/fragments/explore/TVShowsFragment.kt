@@ -1,4 +1,4 @@
-package com.meghdut.upsilent.fragments
+package com.meghdut.upsilent.fragments.explore
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Meghdut Mandal on 07/02/17.
  */
 class TVShowsFragment : Fragment() {
-    lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     lateinit var allTvShows: Array<TVShowResponse?>
     var recyclerViewAdapterTVShow: RecyclerViewAdapterTVShow? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,9 +43,6 @@ class TVShowsFragment : Fragment() {
             override fun onResponse(call: Call<TVShowResponse>, response: Response<TVShowResponse>) {
                 val tvShowList = response.body()!!.tvShows
                 val airingtoday = TVShowResponse()
-                if (tvShowList == null) {
-                    return
-                }
                 airingtoday.tvShows = tvShowList
                 allTvShows[0] = airingtoday
                 recyclerViewAdapterTVShow!!.notifyDataSetChanged()

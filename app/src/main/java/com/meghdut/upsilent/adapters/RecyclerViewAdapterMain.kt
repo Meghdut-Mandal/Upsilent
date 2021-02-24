@@ -55,7 +55,7 @@ class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var
                     val intent = Intent()
                     val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
                     intent.setClass(mContext, SeeAllMoviesActivity::class.java)
-                    intent.putExtra("ABCD", mMovies[position]!!.movies)
+                    intent.putExtra("ABCD", mMovies[position].movies)
                     intent.putExtra("MOVIETYPE", "Now Playing")
                     mContext.startActivity(intent, bundle)
                 }
@@ -71,12 +71,12 @@ class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var
                 holder.seeAlltextView.setOnClickListener { v: View? ->
                     val intent = Intent()
                     val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
-                    intent.putExtra("ABCD", mMovies[position]!!.movies)
+                    intent.putExtra("ABCD", mMovies[position].movies)
                     intent.putExtra("MOVIETYPE", "Top Rated Movies")
                     intent.setClass(mContext, SeeAllMoviesActivity::class.java)
                     mContext.startActivity(intent, bundle)
                 }
-                recyclerViewAdapter = RecyclerViewAdapter(mMovies[position]!!.movies, mContext)
+                recyclerViewAdapter = RecyclerViewAdapter(mMovies[position].movies, mContext)
                 val horizontalManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
                 holder.horizontalRecyclerView.addItemDecoration(HorizontalItemDecoration(AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2), AppUtil.dpToPx(mContext, 2)))
                 holder.horizontalRecyclerView.layoutManager = horizontalManager
@@ -89,7 +89,7 @@ class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var
                     holder.seeAlltextView.setOnClickListener { v: View? ->
                         val intent = Intent()
                         val bundle = ActivityOptions.makeSceneTransitionAnimation(mContext as Activity).toBundle()
-                        intent.putExtra("ABCD", mMovies[position]!!.movies)
+                        intent.putExtra("ABCD", mMovies[position].movies)
                         intent.putExtra("MOVIETYPE", "Upcoming Movies")
                         intent.setClass(mContext, SeeAllMoviesActivity::class.java)
                         mContext.startActivity(intent, bundle)
@@ -127,10 +127,9 @@ class RecyclerViewAdapterMain(private val mMovies: ArrayList<MovieResponse>, var
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var movieType: TextView = itemView.findViewById(R.id.movieTypeTextView)
         var horizontalRecyclerView: RecyclerView
-        var seeAlltextView: TextView
+        var seeAlltextView: TextView = itemView.findViewById(R.id.seeAllTextView)
 
         init {
-            seeAlltextView = itemView.findViewById(R.id.seeAllTextView)
             horizontalRecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal)
         }
     }

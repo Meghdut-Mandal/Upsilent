@@ -1,7 +1,6 @@
-package com.meghdut.upsilent.fragments
+package com.meghdut.upsilent.fragments.explore
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

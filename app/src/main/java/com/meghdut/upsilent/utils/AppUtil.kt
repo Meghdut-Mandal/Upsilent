@@ -2,7 +2,6 @@ package com.meghdut.upsilent.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
-import kotlin.math.roundToLong
 
 /**
  * Created by Meghdut Mandal on 01/02/20.

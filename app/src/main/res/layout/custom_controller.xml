@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Video Title"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:textColor="@color/white"/>
@@ -34,7 +34,7 @@
             android:id="@+id/text_speed"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center_vertical"
             android:text="1x"
             android:textColor="@color/white"

@@ -56,13 +56,12 @@ class RecyclerAdapterSimilarMovies(private val mSimilarMovies: ArrayList<Movie>?
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var similarMoviesCardView: CardView = itemView.findViewById(R.id.similarMoviesCardView)
-        var similarMoviesThumbnailImageView: ImageView
+        var similarMoviesThumbnailImageView: ImageView = itemView.findViewById(R.id.similarMoviesThumbnailImageView)
         var similarMoviesNameTextView: TextView
         var similarMoviesReleaseDateTextView: TextView
         var similarmoviesRatingTextView: TextView
 
         init {
-            similarMoviesThumbnailImageView = itemView.findViewById(R.id.similarMoviesThumbnailImageView)
             similarMoviesNameTextView = itemView.findViewById(R.id.similarMoviesNameTextView)
             similarMoviesReleaseDateTextView = itemView.findViewById(R.id.similarMoviesReleaseDateTextView)
             similarmoviesRatingTextView = itemView.findViewById(R.id.similarmoviesRatingTextView)

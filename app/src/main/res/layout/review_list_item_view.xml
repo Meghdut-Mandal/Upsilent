@@ -25,7 +25,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/proximanova_semibold_webfont"
             android:textColor="@color/text1"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/circleTV"
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/text1"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/reviewSubheadingTV"
@@ -80,8 +80,9 @@
             android:padding="6dp"
             android:textAllCaps="true"
             android:textColor="@color/text1"
-            android:textSize="14dp"
-            android:visibility="invisible" />
+            android:textSize="14sp"
+            android:visibility="invisible"
+            android:focusable="true" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

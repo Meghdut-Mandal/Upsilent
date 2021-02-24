@@ -56,13 +56,12 @@ class RecyclerAdapterSearchTvShows(private val mTvShows: ArrayList<TVShow>?, var
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cv: CardView = itemView.findViewById(R.id.cardView)
-        var thumbnailImage: ImageView
+        var thumbnailImage: ImageView = itemView.findViewById(R.id.thumbnailImageView)
         var name: TextView
         var releaseDate: TextView
         var rating: TextView
 
         init {
-            thumbnailImage = itemView.findViewById(R.id.thumbnailImageView)
             name = itemView.findViewById(R.id.nameTextView)
             releaseDate = itemView.findViewById(R.id.releaseDateTextView)
             rating = itemView.findViewById(R.id.ratingTextView)

@@ -44,7 +44,7 @@ class ExoPlayerActivity : AppCompatActivity() {
         //        buttonSpeedControl = playerView.findViewById(R.id.button_speed_control);
         buttonFullScreen = playerView!!.findViewById(R.id.button_fullscreen)
         textSpeed = playerView!!.findViewById(R.id.text_speed)
-        textSpeed.setOnClickListener(View.OnClickListener { v: View? ->
+        textSpeed.setOnClickListener { v: View? ->
             val qualityRange = arrayOf(
                     "0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "2x"
             )
@@ -88,9 +88,9 @@ class ExoPlayerActivity : AppCompatActivity() {
                 }
             }
             builder.show()
-        })
-        buttonMenu.setOnClickListener(View.OnClickListener { v: View? -> showPopup(v) })
-        buttonFullScreen.setOnClickListener(View.OnClickListener { v: View? ->
+        }
+        buttonMenu.setOnClickListener { v: View? -> showPopup(v) }
+        buttonFullScreen.setOnClickListener { v: View? ->
             if (screenOrientationFlag) {
                 buttonFullScreen.setImageDrawable(getDrawable(R.drawable.ic_fullscreen))
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -100,7 +100,7 @@ class ExoPlayerActivity : AppCompatActivity() {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 screenOrientationFlag = true
             }
-        })
+        }
     }
 
     private fun showPopup(v: View?) {

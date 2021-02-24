@@ -3,8 +3,8 @@ package com.meghdut.upsilent.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.meghdut.upsilent.fragments.MoviesFragment
-import com.meghdut.upsilent.fragments.TVShowsFragment
+import com.meghdut.upsilent.fragments.explore.MoviesFragment
+import com.meghdut.upsilent.fragments.explore.TVShowsFragment
 
 /**
  * Created by Meghdut Mandal on 06/02/17.

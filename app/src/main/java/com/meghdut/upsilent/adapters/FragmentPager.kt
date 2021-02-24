@@ -3,9 +3,9 @@ package com.meghdut.upsilent.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.meghdut.upsilent.fragments.CastMovieFragment
-import com.meghdut.upsilent.fragments.InfoAboutMovieFragment
-import com.meghdut.upsilent.fragments.ReviewsFragment
+import com.meghdut.upsilent.fragments.explore.CastMovieFragment
+import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment
+import com.meghdut.upsilent.fragments.explore.ReviewsFragment
 import java.lang.IllegalArgumentException
 import java.util.*
 

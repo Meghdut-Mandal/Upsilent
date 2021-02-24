@@ -51,13 +51,12 @@ class RecyclerViewAdapterTVShowHorizontal(private val mTVShows: ArrayList<TVShow
 
     class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var cv: CardView = itemView.findViewById(R.id.cardView)
-        var tvShowThumbnailImage: ImageView
+        var tvShowThumbnailImage: ImageView = itemView.findViewById(R.id.tvShowThumbnailImageView)
         var tvShowName: TextView
         var tvShowReleaseDate: TextView
         var rating: TextView
 
         init {
-            tvShowThumbnailImage = itemView.findViewById(R.id.tvShowThumbnailImageView)
             tvShowName = itemView.findViewById(R.id.tvShowNameTextView)
             tvShowReleaseDate = itemView.findViewById(R.id.tvShowReleaseDateTextView)
             rating = itemView.findViewById(R.id.ratingTextView)

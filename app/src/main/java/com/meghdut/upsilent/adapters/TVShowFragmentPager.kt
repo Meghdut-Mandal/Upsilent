@@ -3,8 +3,8 @@ package com.meghdut.upsilent.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.meghdut.upsilent.fragments.CastTVShowFragment
-import com.meghdut.upsilent.fragments.InfoAboutTVShowFragment
+import com.meghdut.upsilent.fragments.explore.CastTVShowFragment
+import com.meghdut.upsilent.fragments.explore.InfoAboutTVShowFragment
 import java.lang.IllegalArgumentException
 import java.util.*
 

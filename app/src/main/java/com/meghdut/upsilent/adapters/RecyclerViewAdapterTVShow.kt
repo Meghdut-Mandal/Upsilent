@@ -132,10 +132,9 @@ class RecyclerViewAdapterTVShow(private val mTVShows: Array<TVShowResponse?>?, v
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvShowType: TextView = itemView.findViewById(R.id.tvShowTypeTextView)
         var horizontalRecyclerView: RecyclerView
-        var seeAlltextView: TextView
+        var seeAlltextView: TextView = itemView.findViewById(R.id.seeAllTextView)
 
         init {
-            seeAlltextView = itemView.findViewById(R.id.seeAllTextView)
             horizontalRecyclerView = itemView.findViewById(R.id.activityMainRecyclerViewHorizontal)
         }
     }

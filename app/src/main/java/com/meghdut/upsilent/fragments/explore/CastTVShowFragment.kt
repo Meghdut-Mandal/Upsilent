@@ -1,6 +1,5 @@
-package com.meghdut.upsilent.fragments
+package com.meghdut.upsilent.fragments.explore
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +17,10 @@ import java.util.*
  * Created by Meghdut Mandal on 18/03/17.
  */
 class CastTVShowFragment : Fragment() {
-    lateinit var recyclerView: RecyclerView
-    lateinit var recyclerViewAdapterTVShowCast: RecyclerViewAdapterTVShowCast
-    lateinit var tvShowCastMain: ArrayList<Cast>
-    lateinit var noCastTextView: TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapterTVShowCast: RecyclerViewAdapterTVShowCast
+    private lateinit var tvShowCastMain: ArrayList<Cast>
+    private lateinit var noCastTextView: TextView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val v = inflater.inflate(R.layout.fragment_cast_tvshow, container, false)
