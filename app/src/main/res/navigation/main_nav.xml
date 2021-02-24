@@ -9,7 +9,7 @@
         android:id="@+id/exploreFragment"
         android:name="com.meghdut.upsilent.fragments.ExploreFragment"
         android:label="fragment_explore"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/fragment_explore" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.meghdut.upsilent.fragments.SettingsFragment"

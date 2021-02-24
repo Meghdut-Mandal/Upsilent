@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
         Kotpref.init(this)
         super.onCreate(savedInstanceState)
         if (LocalDb.isLoggedIn) {
-            navigateToMainActivity(this)
+            navigateToHomeActivity(this)
         }
         setContentView(R.layout.activity_login)
     }
@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                 isLoggedIn = true
                 name = account.displayName ?: " None"
                 email = account.email ?: "None"
-                navigateToMainActivity(activity)
+                navigateToHomeActivity(activity)
             }
         } else {
             Snackbar.make(imageView, "Login Failed", Snackbar.LENGTH_LONG).show()
@@ -86,8 +86,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun navigateToMainActivity(loginActivity: AppCompatActivity) {
-        val intent = Intent(loginActivity, MainActivity::class.java)
+    private fun navigateToHomeActivity(loginActivity: AppCompatActivity) {
+        val intent = Intent(loginActivity, HomeActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -37,10 +37,6 @@
             android:name=".SeeAllMoviesActivity"
             android:label="@string/title_activity_main3" />
         <activity
-            android:name=".MainActivity"
-            android:label="MovieDB"
-            android:theme="@style/AppTheme.Home"></activity>
-        <activity
             android:name=".AboutTVShowActivity"
             android:label="@string/title_activity_about_tvshow"
             android:theme="@style/AppTheme.NoActionBar" />
