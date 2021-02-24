@@ -49,7 +49,6 @@ class InfoAboutMovieFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        context = activity
         val v = inflater.inflate(R.layout.fragment_info_movie, container, false)
         abouFilmTextView = v.findViewById(R.id.aboutFilmTextView)
         releasedTextView = v.findViewById(R.id.releasedTextView)
