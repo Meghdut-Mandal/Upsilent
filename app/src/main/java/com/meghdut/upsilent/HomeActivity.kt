@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.findNavController
 import com.androidisland.views.ArcBottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -21,8 +22,19 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
     }
 
+    fun navController() = findNavController(R.id.navHostFragment)
+
     override fun onResume() {
         super.onResume()
+        val navigationView = findViewById<ArcBottomNavigationView>(R.id.bottomNavigationView)
+        setUpBottomNav(navigationView)
+        navigationView.setOnNavigationItemSelectedListener {
+            navController().navigate(it.itemId)
+            return@setOnNavigationItemSelectedListener false
+        }
+    }
+
+    private fun setUpBottomNav(navigationView: ArcBottomNavigationView) {
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
         val fabMovieSearch = findViewById<FloatingActionButton>(R.id.searchMovieFabButton)
@@ -31,7 +43,6 @@ class HomeActivity : AppCompatActivity() {
         val searchShowTV = findViewById<TextView>(R.id.searchShowTV)
         val translucentV = findViewById<View>(R.id.translucentV)
 
-        val navigationView = findViewById<ArcBottomNavigationView>(R.id.bottomNavigationView)
         navigationView.buttonClickListener = {
             isOpen = if (isOpen) {
                 translucentV.visibility = View.GONE
