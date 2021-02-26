@@ -22,6 +22,7 @@ import java.util.*
 class InfoAboutTVShowFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_info_tvshow, container, false)
+
     }
 
     fun setUIArguments(args: Bundle) {
@@ -61,7 +62,7 @@ class InfoAboutTVShowFragment : Fragment() {
     }
 
     private fun dateGenerator(date: String?): String {
-        val month = date!!.substring(5, 7)
+        val month  = date!!.substring(5, 7)
         var ans = ""
         when (month) {
             "01" -> ans = "January"

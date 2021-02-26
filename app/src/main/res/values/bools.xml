@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="file_list_app_bar_lift_on_scroll">false</bool>
+</resources>

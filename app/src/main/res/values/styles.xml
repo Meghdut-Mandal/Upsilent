@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -9,6 +9,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Small">
+        <item name="android:textSize" tools:ignore="SpUsage">12dp</item>
+    </style>
     <style name="AppTheme.NoActionBar" />
 
     <style name="AppTheme.Home" parent="Theme.MaterialComponents.Light.NoActionBar">
