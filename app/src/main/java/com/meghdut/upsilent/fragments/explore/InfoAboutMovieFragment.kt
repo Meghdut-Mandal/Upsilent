@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.meghdut.upsilent.R
 import com.meghdut.upsilent.adapters.RecyclerAdapterMovieTrailer
 import com.meghdut.upsilent.adapters.RecyclerAdapterSimilarMovies
+import com.meghdut.upsilent.databinding.FragmentInfoMovieBinding
 import com.meghdut.upsilent.models.Movie
 import com.meghdut.upsilent.models.Trailer
 import com.meghdut.upsilent.utils.AppUtil.dpToPx
@@ -22,19 +20,24 @@ import java.util.*
  * Created by Meghdut Mandal on 24/01/17.
  */
 class InfoAboutMovieFragment : Fragment() {
-    private lateinit var abouFilmTextView: TextView
-    private lateinit var releasedTextView: TextView
-    private lateinit var budgetTextView: TextView
-    private lateinit var noReviewMovieTextView: TextView
-    private lateinit var noSimilarMoviesTextView: TextView
-    private lateinit var revenueTextView: TextView
-    private lateinit var trailorsRecyclerView: RecyclerView
-    private lateinit var similarMoviesRecyclerView: RecyclerView
+//    private lateinit var abouFilmTextView: TextView
+//    private lateinit var releasedTextView: TextView
+//    private lateinit var budgetTextView: TextView
+//    private lateinit var noReviewMovieTextView: TextView
+//    private lateinit var noSimilarMoviesTextView: TextView
+//    private lateinit var revenueTextView: TextView
+//    private lateinit var trailorsRecyclerView: RecyclerView
+//    private lateinit var similarMoviesRecyclerView: RecyclerView
     private var recyclerAdapterMovieTrailer: RecyclerAdapterMovieTrailer? = null
     private var recyclerAdapterSimilarMovies: RecyclerAdapterSimilarMovies? = null
     private var mainSimilarMovies: ArrayList<Movie>? = null
     private var mainTrailerMoviesThumbnails: ArrayList<Trailer>? = null
     private var infoAboutMovieFragmentListener: InfoAboutMovieFragmentListener? = null
+
+    private var _binding : FragmentInfoMovieBinding?= null
+    private val binding get() = _binding!!
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         infoAboutMovieFragmentListener = context as InfoAboutMovieFragmentListener
@@ -48,20 +51,31 @@ class InfoAboutMovieFragment : Fragment() {
         infoAboutMovieFragmentListener = listener
     }
 
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+////        context = activity
+//        val v = inflater.inflate(R.layout.fragment_info_movie, container, false)
+//        abouFilmTextView = v.findViewById(R.id.aboutFilmTextView)
+//        releasedTextView = v.findViewById(R.id.releasedTextView)
+//        budgetTextView = v.findViewById(R.id.budgetTextView)
+//        noReviewMovieTextView = v.findViewById(R.id.noReviewMovieTextView)
+//        revenueTextView = v.findViewById(R.id.revenueTextView)
+//        noSimilarMoviesTextView = v.findViewById(R.id.noSimilarMoviesTextView)
+//        trailorsRecyclerView = v.findViewById(R.id.trailorsRecyclerView)
+//        similarMoviesRecyclerView = v.findViewById(R.id.similarMoviesRecyclerView)
+//        val seeAlltextViewMovieInfofragment = v.findViewById<TextView>(R.id.seeAllTextViewMovieInfoFragment)
+//        seeAlltextViewMovieInfofragment.setOnClickListener { v1: View? -> infoAboutMovieFragmentListener!!.onSeeAllSimilarMoviesClicked() }
+//        return v
+//    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        context = activity
-        val v = inflater.inflate(R.layout.fragment_info_movie, container, false)
-        abouFilmTextView = v.findViewById(R.id.aboutFilmTextView)
-        releasedTextView = v.findViewById(R.id.releasedTextView)
-        budgetTextView = v.findViewById(R.id.budgetTextView)
-        noReviewMovieTextView = v.findViewById(R.id.noReviewMovieTextView)
-        revenueTextView = v.findViewById(R.id.revenueTextView)
-        noSimilarMoviesTextView = v.findViewById(R.id.noSimilarMoviesTextView)
-        trailorsRecyclerView = v.findViewById(R.id.trailorsRecyclerView)
-        similarMoviesRecyclerView = v.findViewById(R.id.similarMoviesRecyclerView)
-        val seeAlltextViewMovieInfofragment = v.findViewById<TextView>(R.id.seeAllTextViewMovieInfoFragment)
-        seeAlltextViewMovieInfofragment.setOnClickListener { v1: View? -> infoAboutMovieFragmentListener!!.onSeeAllSimilarMoviesClicked() }
-        return v
+        _binding= FragmentInfoMovieBinding.inflate(inflater,container,false)
+        return binding.root
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,35 +86,35 @@ class InfoAboutMovieFragment : Fragment() {
     fun setUIArguements(args: Bundle) {
         requireActivity().runOnUiThread {
             if (args.getBoolean("INFO")) {
-                abouFilmTextView.text = args.getString("OVERVIEW")
+                binding.aboutFilmTextView.text = args.getString("OVERVIEW")
                 val releaseDate = dateGenerator(args.getString("RELEASE_DATE"))
-                releasedTextView.text = releaseDate
+                binding.releasedTextView.text = releaseDate
                 val budget = "£" + args.getLong("BUDGET")
-                budgetTextView.text = budget
+                binding.budgetTextView.text = budget
                 val revenue = "£" + args.getLong("REVENUE")
-                revenueTextView.text = revenue
+                binding.revenueTextView.text = revenue
                 mainTrailerMoviesThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>?
                 if (mainTrailerMoviesThumbnails!!.size == 0) {
-                    noReviewMovieTextView.visibility = View.VISIBLE
-                    noReviewMovieTextView.text = "No Trailers are currently available."
+                    binding.noReviewMovieTextView.visibility = View.VISIBLE
+                    binding.noReviewMovieTextView.text = "No Trailers are currently available."
                 } else {
                     recyclerAdapterMovieTrailer = RecyclerAdapterMovieTrailer(mainTrailerMoviesThumbnails, requireContext())
                     val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                    trailorsRecyclerView.layoutManager = HorizontalManager
-                    trailorsRecyclerView.adapter = recyclerAdapterMovieTrailer
+                    binding.trailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                    binding.trailorsRecyclerView.layoutManager = HorizontalManager
+                    binding.trailorsRecyclerView.adapter = recyclerAdapterMovieTrailer
                 }
             } else if (args.getBoolean("SIMILAR")) {
                 mainSimilarMovies = args.getSerializable("SIMILAR_MOVIES") as ArrayList<Movie>?
                 if (mainSimilarMovies!!.size == 0) {
-                    noSimilarMoviesTextView.visibility = View.VISIBLE
-                    noSimilarMoviesTextView.text = "No Similar Movies are currently available."
+                    binding.noSimilarMoviesTextView.visibility = View.VISIBLE
+                    binding.noSimilarMoviesTextView.text = "No Similar Movies are currently available."
                 } else {
                     recyclerAdapterSimilarMovies = RecyclerAdapterSimilarMovies(mainSimilarMovies, requireContext())
                     val HorizontalManager1 = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    similarMoviesRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                    similarMoviesRecyclerView.layoutManager = HorizontalManager1
-                    similarMoviesRecyclerView.adapter = recyclerAdapterSimilarMovies
+                    binding.similarMoviesRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                    binding.similarMoviesRecyclerView.layoutManager = HorizontalManager1
+                    binding.similarMoviesRecyclerView.adapter = recyclerAdapterSimilarMovies
                 }
             }
         }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.meghdut.upsilent.R
 import com.meghdut.upsilent.adapters.RecyclerViewAdapterMain
+import com.meghdut.upsilent.databinding.FragmentMoviesBinding
 import com.meghdut.upsilent.network.ApiService
 import com.meghdut.upsilent.network.MovieResponse
 import com.meghdut.upsilent.network.URLConstants
@@ -24,14 +25,30 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MoviesFragment : Fragment() {
     private lateinit var allMovies: ArrayList<MovieResponse>
     private var recyclerViewAdapterMain: RecyclerViewAdapterMain? = null
+
+    private var _binding : FragmentMoviesBinding?= null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_movies, container, false)
-        val recyclerView: RecyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
+        //val recyclerView: RecyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
+        _binding= FragmentMoviesBinding.inflate(inflater,container,false)
         allMovies = arrayListOf()
         recyclerViewAdapterMain = RecyclerViewAdapterMain(allMovies, requireActivity())
-        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        recyclerView.adapter = recyclerViewAdapterMain
-        return v
+        binding.activityMainVerticalRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.activityMainVerticalRecyclerView.adapter = recyclerViewAdapterMain
+        return binding.root
+    }
+
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        _binding= FragmentMoviesBinding.inflate(inflater,container,false)
+//        return binding.root
+//
+//    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
