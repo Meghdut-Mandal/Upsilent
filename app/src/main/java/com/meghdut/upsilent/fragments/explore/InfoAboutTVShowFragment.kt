@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.meghdut.upsilent.R
 import com.meghdut.upsilent.adapters.RecyclerAdapterTVShowTrailer
+import com.meghdut.upsilent.databinding.FragmentInfoTvshowBinding
 import com.meghdut.upsilent.models.TVShowsCreaters
 import com.meghdut.upsilent.models.Trailer
 import com.meghdut.upsilent.utils.AppUtil.dpToPx
@@ -20,49 +18,76 @@ import java.util.*
  * Created by Meghdut Mandal on 09/02/17.
  */
 class InfoAboutTVShowFragment : Fragment() {
+//    private lateinit var aboutTvShowTextView: TextView
+//    private lateinit var firstAirDateTextView: TextView
+//    private lateinit var lastAirDateTextView: TextView
+//    private lateinit var createdByTextView: TextView
+//    private lateinit var showTypeTextView: TextView
+//    private lateinit var showStatusTextView: TextView
+//    private lateinit var noReviewTextView: TextView
+//    private lateinit var trailorsRecyclerView: RecyclerView
+
+    private lateinit var mainTrailerTvShowsThumbnails: ArrayList<Trailer>
+    private var _binding : FragmentInfoTvshowBinding?= null
+    private val binding get() = _binding!!
+
+
+//    var context: Context? = null
+private var recyclerAdapterTVShowTrailer: RecyclerAdapterTVShowTrailer? = null
+//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        val v = inflater.inflate(R.layout.fragment_info_tvshow, container, false)
+////        context = activity
+//        aboutTvShowTextView = v.findViewById(R.id.aboutTvShowTextView)
+//        firstAirDateTextView = v.findViewById(R.id.firstAirDateTextView)
+//        lastAirDateTextView = v.findViewById(R.id.lastAirDateTextView)
+//        createdByTextView = v.findViewById(R.id.createdByTextView)
+//        showStatusTextView = v.findViewById(R.id.showStatusTextView)
+//        showTypeTextView = v.findViewById(R.id.showTypeTextView)
+//        noReviewTextView = v.findViewById(R.id.noTVTrailerTextView)
+//        trailorsRecyclerView = v.findViewById(R.id.trailorsTvShowRecyclerView)
+//        return v
+//    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_info_tvshow, container, false)
+        _binding= FragmentInfoTvshowBinding.inflate(inflater,container,false)
+        return binding.root
 
     }
 
-    fun setUIArguments(args: Bundle) {
-        val aboutTvShowTextView: TextView = requireView().findViewById(R.id.aboutTvShowTextView)
-        val firstAirDateTextView: TextView = requireView().findViewById(R.id.firstAirDateTextView)
-        val lastAirDateTextView: TextView = requireView().findViewById(R.id.lastAirDateTextView)
-        val createdByTextView: TextView = requireView().findViewById(R.id.createdByTextView)
-        val showTypeTextView: TextView = requireView().findViewById(R.id.showStatusTextView)
-        val showStatusTextView: TextView = requireView().findViewById(R.id.showTypeTextView)
-        val noReviewTextView: TextView = requireView().findViewById(R.id.noTVTrailerTextView)
-        val tailorsRecyclerView: RecyclerView = requireView().findViewById(R.id.trailorsTvShowRecyclerView)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding=null
+    }
 
+    fun setUIArguements(args: Bundle) {
         requireActivity().runOnUiThread {
-            aboutTvShowTextView.text = args.getString("OVERVIEW")
+            binding.aboutTvShowTextView.text = args.getString("OVERVIEW")
             val firstAirDate = dateGenerator(args.getString("FIRST_AIR_DATE"))
-            firstAirDateTextView.text = firstAirDate
+            binding.firstAirDateTextView.text = firstAirDate
             val lastAirDate = dateGenerator(args.getString("LAST_AIR_DATE"))
-            lastAirDateTextView.text = lastAirDate
+            binding.lastAirDateTextView.text = lastAirDate
             val obj = args.getSerializable("CREATORS") as ArrayList<TVShowsCreaters>?
             for (i in obj!!.indices) {
-                if (i < obj.size - 1) createdByTextView.append(obj[i].name + ", ") else createdByTextView.append(obj[i].name)
+                if (i < obj.size - 1) binding.createdByTextView.append(obj[i].name + ", ") else binding.createdByTextView.append(obj[i].name)
             }
-            showTypeTextView.text = args.getString("SHOW_TYPE")
-            showStatusTextView.text = args.getString("STATUS")
-            val mainTrailerTvShowsThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>
+            binding.showTypeTextView.text = args.getString("SHOW_TYPE")
+            binding.showStatusTextView.text = args.getString("STATUS")
+            mainTrailerTvShowsThumbnails = args.getSerializable("TRAILER_THUMBNAILS") as ArrayList<Trailer>
             if (mainTrailerTvShowsThumbnails.size == 0) {
-                noReviewTextView.visibility = View.VISIBLE
-                noReviewTextView.text = "No Trailers are currently available."
+                binding.noTVTrailerTextView.visibility = View.VISIBLE
+                binding.noTVTrailerTextView.text = "No Trailers are currently available."
             } else {
-                val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                tailorsRecyclerView.layoutManager = linearLayoutManager
-                tailorsRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
-                val recyclerAdapterTVShowTrailer = RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, requireContext())
-                tailorsRecyclerView.adapter = recyclerAdapterTVShowTrailer
+                val HorizontalManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                binding.trailorsTvShowRecyclerView.layoutManager = HorizontalManager
+                binding.trailorsTvShowRecyclerView.addItemDecoration(HorizontalItemDecoration(dpToPx(requireContext(), 16), dpToPx(requireContext(), 6), dpToPx(requireContext(), 16)))
+                recyclerAdapterTVShowTrailer = RecyclerAdapterTVShowTrailer(mainTrailerTvShowsThumbnails, requireContext())
+                binding.trailorsTvShowRecyclerView.adapter = recyclerAdapterTVShowTrailer
             }
         }
     }
 
     private fun dateGenerator(date: String?): String {
-        val month  = date!!.substring(5, 7)
+        val month = date!!.substring(5, 7)
         var ans = ""
         when (month) {
             "01" -> ans = "January"

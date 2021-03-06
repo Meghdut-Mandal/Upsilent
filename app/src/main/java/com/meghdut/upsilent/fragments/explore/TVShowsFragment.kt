@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.meghdut.upsilent.R
 import com.meghdut.upsilent.adapters.RecyclerViewAdapterTVShow
+import com.meghdut.upsilent.databinding.FragmentTvshowsBinding
 import com.meghdut.upsilent.network.ApiService
 import com.meghdut.upsilent.network.TVShowResponse
 import com.meghdut.upsilent.network.URLConstants
@@ -22,17 +21,23 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Meghdut Mandal on 07/02/17.
  */
 class TVShowsFragment : Fragment() {
-    private lateinit var recyclerView: RecyclerView
+//    private lateinit var recyclerView: RecyclerView
     lateinit var allTvShows: Array<TVShowResponse?>
     var recyclerViewAdapterTVShow: RecyclerViewAdapterTVShow? = null
+
+    private var _binding : FragmentTvshowsBinding?= null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_tvshows, container, false)
-        recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
+        //  val v = inflater.inflate(R.layout.fragment_tvshows, container, false)
+        _binding= FragmentTvshowsBinding.inflate(inflater,container,false)
+
+        //  recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
         allTvShows = arrayOfNulls(4)
         recyclerViewAdapterTVShow = RecyclerViewAdapterTVShow(allTvShows, requireActivity())
-        recyclerView.adapter = recyclerViewAdapterTVShow
+        binding.activityMainVerticalRecyclerView.adapter = recyclerViewAdapterTVShow
         val verticalManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = verticalManager
+        binding.activityMainVerticalRecyclerView.layoutManager = verticalManager
         val retrofit = Retrofit.Builder()
                 .baseUrl(URLConstants.TVSHOW_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -95,6 +100,6 @@ class TVShowsFragment : Fragment() {
 
             override fun onFailure(call: Call<TVShowResponse>, t: Throwable) {}
         })
-        return v
+        return binding.root
     }
 }
