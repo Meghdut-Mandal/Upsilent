@@ -20,6 +20,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.meghdut.upsilent.adapters.BannerViewPagerAdapter
 import com.meghdut.upsilent.adapters.TVShowFragmentPager
+import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
 import com.meghdut.upsilent.databinding.ActivityAboutTvshowBinding
 import com.meghdut.upsilent.fragments.explore.CastTVShowFragment
 import com.meghdut.upsilent.fragments.explore.InfoAboutTVShowFragment
@@ -55,7 +56,10 @@ class AboutTVShowActivity : AppCompatActivity() {
     lateinit var radioGroupTvShow: RadioGroup
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about_tvshow)
+//        setContentView(R.layout.activity_about_tvshow)
+        binding = ActivityAboutTvshowBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         title = ""
         val intent = intent
         val tvShow_id = intent.getIntExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, 0)
