@@ -9,73 +9,70 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
-import androidx.navigation.findNavController
 import com.androidisland.views.ArcBottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
+import com.meghdut.upsilent.databinding.ActivityAboutTvshowBinding
+import com.meghdut.upsilent.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHomeBinding
+
 
     private var isOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+//        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
     }
-
-    fun navController() = findNavController(R.id.navHostFragment)
 
     override fun onResume() {
         super.onResume()
-        val navigationView = findViewById<ArcBottomNavigationView>(R.id.bottomNavigationView)
-        setUpBottomNav(navigationView)
-        navigationView.setOnNavigationItemSelectedListener {
-            navController().navigate(it.itemId)
-            return@setOnNavigationItemSelectedListener false
-        }
-    }
-
-    private fun setUpBottomNav(navigationView: ArcBottomNavigationView) {
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-        val fabMovieSearch = findViewById<FloatingActionButton>(R.id.searchMovieFabButton)
-        val fabTvShowSearch = findViewById<FloatingActionButton>(R.id.searchTvShowFabButton)
-        val searchMovieTV = findViewById<TextView>(R.id.searchMovieTV)
-        val searchShowTV = findViewById<TextView>(R.id.searchShowTV)
-        val translucentV = findViewById<View>(R.id.translucentV)
+//        val fabMovieSearch = findViewById<FloatingActionButton>(R.id.searchMovieFabButton)
+//        val fabTvShowSearch = findViewById<FloatingActionButton>(R.id.searchTvShowFabButton)
+//        val searchMovieTV = findViewById<TextView>(R.id.searchMovieTV)
+//        val searchShowTV = findViewById<TextView>(R.id.searchShowTV)
+//        val translucentV = findViewById<View>(R.id.translucentV)
 
-        navigationView.buttonClickListener = {
+//        val navigationView = findViewById<ArcBottomNavigationView>(R.id.bottomNavigationView)
+        binding.bottomNavigationView.buttonClickListener = {
             isOpen = if (isOpen) {
-                translucentV.visibility = View.GONE
-                navigationView.buttonIcon = ResourcesCompat.getDrawable(resources, R.drawable.fab_search, theme)
-                fabMovieSearch.startAnimation(fabClose)
-                fabTvShowSearch.startAnimation(fabClose)
-                searchMovieTV.visibility = View.INVISIBLE
-                searchShowTV.visibility = View.INVISIBLE
-                searchMovieTV.startAnimation(fabClose)
-                searchShowTV.startAnimation(fabClose)
-                fabMovieSearch.isClickable = false
-                fabTvShowSearch.isClickable = false
+                binding.translucentV.visibility = View.GONE
+                binding.bottomNavigationView.buttonIcon = ResourcesCompat.getDrawable(resources, R.drawable.fab_search, theme)
+                binding.searchMovieFabButton.startAnimation(fabClose)
+                binding.searchTvShowFabButton.startAnimation(fabClose)
+                binding.searchMovieTV.visibility = View.INVISIBLE
+                binding.searchShowTV.visibility = View.INVISIBLE
+                binding.searchMovieTV.startAnimation(fabClose)
+                binding.searchMovieTV.startAnimation(fabClose)
+                binding.searchMovieFabButton.isClickable = false
+                binding.searchTvShowFabButton.isClickable = false
                 false
             } else {
-                translucentV.visibility = View.VISIBLE
-                navigationView.buttonIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_close, theme)
-                fabMovieSearch.startAnimation(fabOpen)
-                fabTvShowSearch.startAnimation(fabOpen)
-                searchMovieTV.visibility = View.VISIBLE
-                searchShowTV.visibility = View.VISIBLE
-                searchMovieTV.startAnimation(fabOpen)
-                searchShowTV.startAnimation(fabOpen)
-                fabMovieSearch.isClickable = true
-                fabTvShowSearch.isClickable = true
+                binding.translucentV.visibility = View.VISIBLE
+                binding.bottomNavigationView.buttonIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_close, theme)
+                binding.searchMovieFabButton.startAnimation(fabOpen)
+                binding.searchTvShowFabButton.startAnimation(fabOpen)
+                binding.searchMovieTV.visibility = View.VISIBLE
+                binding.searchMovieTV.visibility = View.VISIBLE
+                binding.searchMovieTV.startAnimation(fabOpen)
+                binding.searchMovieTV.startAnimation(fabOpen)
+                binding.searchMovieFabButton.isClickable = true
+                binding.searchTvShowFabButton.isClickable = true
                 true
             }
         }
-        fabMovieSearch.setOnClickListener { v: View? ->
+        binding.searchMovieFabButton.setOnClickListener { v: View? ->
             val intent = Intent()
             intent.setClass(this, SearchMovieActivity::class.java)
             startActivity(intent)
         }
-        fabTvShowSearch.setOnClickListener { v: View? ->
+        binding.searchTvShowFabButton.setOnClickListener { v: View? ->
             val intent = Intent()
             intent.setClass(this, SearchTVShowsActivity::class.java)
             startActivity(intent)

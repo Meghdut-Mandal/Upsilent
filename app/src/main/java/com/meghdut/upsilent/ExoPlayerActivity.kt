@@ -21,8 +21,15 @@ import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
+import com.meghdut.upsilent.databinding.ActivityAboutTvshowBinding
+import com.meghdut.upsilent.databinding.ActivityExoPlayerBinding
 
 class ExoPlayerActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityExoPlayerBinding
+
+
     //Media URL
     private val videoURIMKV = Uri.parse("https://kiit-drive.potassium.workers.dev/0:/Breaking%20Bad%20Seasons%201%20to%205/Breaking%20Bad%20Season%202/%5BS02.E02%5D%20Breaking%20Bad%20-%20Grilled.mp4")
     private lateinit var buttonTrackSelector: Button
@@ -38,7 +45,11 @@ class ExoPlayerActivity : AppCompatActivity() {
     private var defaultTrackSelector: DefaultTrackSelector? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_exo_player)
+//        setContentView(R.layout.activity_exo_player)
+        binding = ActivityExoPlayerBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         playerView = findViewById<View>(R.id.player_view) as PlayerView
         buttonMenu = playerView!!.findViewById(R.id.button_menu)
         //        buttonSpeedControl = playerView.findViewById(R.id.button_speed_control);
