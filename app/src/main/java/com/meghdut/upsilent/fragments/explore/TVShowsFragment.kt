@@ -25,14 +25,12 @@ class TVShowsFragment : Fragment() {
     lateinit var allTvShows: Array<TVShowResponse?>
     var recyclerViewAdapterTVShow: RecyclerViewAdapterTVShow? = null
 
-    private var _binding : FragmentTvshowsBinding?= null
+    private lateinit var _binding : FragmentTvshowsBinding
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //  val v = inflater.inflate(R.layout.fragment_tvshows, container, false)
         _binding= FragmentTvshowsBinding.inflate(inflater,container,false)
 
-        //  recyclerView = v.findViewById(R.id.activityMainVerticalRecyclerView)
         allTvShows = arrayOfNulls(4)
         recyclerViewAdapterTVShow = RecyclerViewAdapterTVShow(allTvShows, requireActivity())
         binding.activityMainVerticalRecyclerView.adapter = recyclerViewAdapterTVShow

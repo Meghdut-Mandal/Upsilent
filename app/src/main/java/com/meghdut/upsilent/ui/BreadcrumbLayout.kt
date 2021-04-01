@@ -17,11 +17,10 @@ import androidx.core.view.isVisible
 import com.meghdut.upsilent.R
 import com.meghdut.upsilent.databinding.BreadcrumbItemBinding
 import com.meghdut.upsilent.models.BreadcrumbData
+import com.meghdut.upsilent.utils.layoutInflater
 import java.nio.file.Path
 
 
-val Context.layoutInflater: LayoutInflater
-    get() = LayoutInflater.from(this)
 
 fun Context.getDimensionPixelSize(@DimenRes id: Int) = resources.getDimensionPixelSize(id)
 @ColorInt
@@ -196,19 +195,7 @@ class BreadcrumbLayout : HorizontalScrollView {
                     listener.navigateTo(path)
                 }
             }
-//            menu.setOnMenuItemClickListener {
-//                when (it.itemId) {
-//                    R.id.action_copy_path -> {
-//                        listener.copyPath(path)
-//                        true
-//                    }
-//                    R.id.action_open_in_new_task -> {
-//                        listener.openInNewTask(path)
-//                        true
-//                    }
-//                    else -> false
-//                }
-//            }
+
         }
     }
 

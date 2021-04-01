@@ -17,10 +17,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.meghdut.upsilent.adapters.BannerViewPagerAdapter
 import com.meghdut.upsilent.adapters.FragmentPager
-import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
+import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment.InfoAboutMovieFragmentListener
 import com.meghdut.upsilent.fragments.explore.CastMovieFragment
 import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment
-import com.meghdut.upsilent.fragments.explore.InfoAboutMovieFragment.InfoAboutMovieFragmentListener
 import com.meghdut.upsilent.fragments.explore.ReviewsFragment
 import com.meghdut.upsilent.models.*
 import com.meghdut.upsilent.network.*
@@ -34,42 +33,36 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+
 class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
-
-
-    private lateinit var binding: com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
-
-
-
     private lateinit var bannerViewPagerAdapter: BannerViewPagerAdapter
     private lateinit var allBannerImageFullLinks: ArrayList<String>
     lateinit var poster: ImageView
-//    private lateinit var binding.tabLayout: TabLayout
-//    private lateinit var binding.container: ViewPager
+    private lateinit var tabLayout: TabLayout
+    private lateinit var mViewPager: ViewPager
     var currentpage = 0
     private var fragmentPager = FragmentPager(supportFragmentManager)
-//    private lateinit var binding.nameTextView: TextView
+    private lateinit var movieNameTextView: TextView
     lateinit var genreTextView: TextView
     lateinit var releaseDateTextView: TextView
     lateinit var runTimeTextView: TextView
+    lateinit var obj: Video
     var doFirst = true
-//    lateinit var binding.radioGroup: RadioGroup
+    lateinit var radioGroup: RadioGroup
     private var movie_id = 0
     private lateinit var movieName: String
     var mainSimilarMovies = ArrayList<Movie>()
+    var aboutMovieResponse: AboutMovieResponse? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_about_movie)
-        binding = ActivityAboutMovieBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(R.layout.activity_about_movie)
         title = ""
         val intent = intent
         movie_id = intent.getIntExtra(IntentConstants.INTENT_KEY_MOVIE_ID, 0)
         val posterPath = intent.getStringExtra(IntentConstants.INTENT_KEY_POSTER_PATH)
         movieName = intent.getStringExtra(IntentConstants.INTENT_KEY_MOVIE_NAME)!!
-//        val binding.toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(binding.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
         val infoAboutMovieFragment = fragmentPager.function(0) as InfoAboutMovieFragment
         infoAboutMovieFragment.setInfoAboutMovieFragmentListener(this)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -81,14 +74,14 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
 
         // Set up the ViewPager with the sections adapter.
         //mViewPager.setAdapter(mSectionsPagerAdapter);
-//        val mBannerViewPager = findViewById<ViewPager>(R.id.pager)
-//        binding.radioGroup = findViewById(R.id.radioGroup)
+        val mBannerViewPager = findViewById<ViewPager>(R.id.pager)
+        radioGroup = findViewById(R.id.radioGroup)
         bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks)
-        binding.pager.adapter = bannerViewPagerAdapter
-        binding.pager.addOnPageChangeListener(object : OnPageChangeListener {
+        mBannerViewPager.adapter = bannerViewPagerAdapter
+        mBannerViewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 if (currentpage == 0 && doFirst) {
-                    val rb = binding.radioGroup.getChildAt(0) as RadioButton
+                    val rb = radioGroup.getChildAt(0) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
                     doFirst = false
                 }
@@ -96,15 +89,15 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
 
             override fun onPageSelected(position: Int) {
                 currentpage = if (position > currentpage) {
-                    val rb = binding.radioGroup.getChildAt(position) as RadioButton
+                    val rb = radioGroup.getChildAt(position) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
-                    val rbi = binding.radioGroup.getChildAt(currentpage) as RadioButton
+                    val rbi = radioGroup.getChildAt(currentpage) as RadioButton
                     rbi.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                     position
                 } else {
-                    val rb = binding.radioGroup.getChildAt(position) as RadioButton
+                    val rb = radioGroup.getChildAt(position) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
-                    val rbi = binding.radioGroup.getChildAt(currentpage) as RadioButton
+                    val rbi = radioGroup.getChildAt(currentpage) as RadioButton
                     rbi.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                     position
                 }
@@ -112,40 +105,40 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-//        poster = findViewById(R.id.posterWithBannerImageView)
+        poster = findViewById(R.id.posterWithBannerImageView)
         Picasso.get().load(URLConstants.IMAGE_BASE_URL + posterPath).into(object : Target {
             override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom) {
                 Palette.from(bitmap).generate { palette: Palette? ->
                     val color = palette!!.getDarkMutedColor(Color.parseColor("#424242"))
                     //Palette.Swatch swatch1 = palette.getDarkVibrantSwatch();
-//                    val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
-                    binding.collapsingToolbar.setBackgroundColor(color)
-                    binding.collapsingToolbar.setContentScrimColor(color)
-                    binding.tabLayout.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
+                    val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
+                    collapsingToolbarLayout.setBackgroundColor(color)
+                    collapsingToolbarLayout.setContentScrimColor(color)
+                    tabLayout!!.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
                 }
-                        binding.posterWithBannerImageView.setImageBitmap(bitmap)
+                poster.setImageBitmap(bitmap)
             }
 
             override fun onBitmapFailed(e: Exception, errorDrawable: Drawable) {}
             override fun onPrepareLoad(placeHolderDrawable: Drawable) {}
         })
-//        binding.nameTextView = findViewById(R.id.nameTextView)
-        binding.nameTextView.text = movieName
-//        genreTextView = findViewById(R.id.genreTextView)
-//        releaseDateTextView = findViewById(R.id.releaseDateTextView)
-//        runTimeTextView = findViewById(R.id.runTimeTextView)
-//        binding.tabLayout = findViewById(R.id.tabLayout)
-//        binding.container = findViewById(R.id.container)
-        binding.tabLayout.addTab(binding.tabLayout.newTab())
-        binding.tabLayout.addTab(binding.tabLayout.newTab())
-        binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        movieNameTextView = findViewById(R.id.nameTextView)
+        movieNameTextView.text = movieName
+        genreTextView = findViewById(R.id.genreTextView)
+        releaseDateTextView = findViewById(R.id.releaseDateTextView)
+        runTimeTextView = findViewById(R.id.runTimeTextView)
+        tabLayout = findViewById(R.id.tabLayout)
+        mViewPager = findViewById(R.id.container)
+        tabLayout.addTab(tabLayout.newTab())
+        tabLayout.addTab(tabLayout.newTab())
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         fragmentPager = FragmentPager(supportFragmentManager)
-        binding.container.adapter = fragmentPager
-        binding.tabLayout.setupWithViewPager(binding.container)
-        binding.container.offscreenPageLimit = 3
-        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+        mViewPager.adapter = fragmentPager
+        tabLayout.setupWithViewPager(mViewPager)
+        mViewPager.offscreenPageLimit = 3
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.container.currentItem = tab.position
+                mViewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -162,13 +155,13 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
                 val bannerImagesLinksList = response.body()!!.bannerImageLinks
                 for (i in bannerImagesLinksList.indices) {
                     if (i < 8) {
-                        allBannerImageFullLinks.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
+                        allBannerImageFullLinks!!.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
                         val radioButton = RadioButton(applicationContext)
                         radioButton.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
-                        binding.radioGroup.addView(radioButton)
+                        radioGroup.addView(radioButton)
                     } else break
                 }
-                bannerViewPagerAdapter.refreshBannerUrls(allBannerImageFullLinks)
+                bannerViewPagerAdapter!!.refreshBannerUrls(allBannerImageFullLinks!!)
             }
 
             override fun onFailure(call: Call<ImageResponse>, t: Throwable) {}
@@ -178,26 +171,26 @@ class AboutMovieActivity : AppCompatActivity(), InfoAboutMovieFragmentListener {
             override fun onResponse(call: Call<AboutMovieResponse>, response: Response<AboutMovieResponse>) {
                 val genres = response.body()!!.genres
                 for (i in genres.indices) {
-                    if (i < genres.size - 1) binding.genreTextView.append(genres[i].name + ", ") else binding.genreTextView.append(genres[i].name)
+                    if (i < genres.size - 1) genreTextView.append(genres[i].name + ", ") else genreTextView.append(genres[i].name)
                 }
-                val aboutMovieResponse = AboutMovieResponse()
-                aboutMovieResponse.overview = response.body()!!.overview
-                aboutMovieResponse.releaseDate = response.body()!!.releaseDate
-                aboutMovieResponse.runTimeOfMovie = response.body()!!.runTimeOfMovie
-                aboutMovieResponse.budget = response.body()!!.budget
-                aboutMovieResponse.revenue = response.body()!!.revenue
-                aboutMovieResponse.genres = response.body()!!.genres
-                aboutMovieResponse.video = response.body()!!.video
-                val obj = response.body()!!.video!!
+                aboutMovieResponse = AboutMovieResponse()
+                aboutMovieResponse!!.overview = response.body()!!.overview
+                aboutMovieResponse!!.releaseDate = response.body()!!.releaseDate
+                aboutMovieResponse!!.runTimeOfMovie = response.body()!!.runTimeOfMovie
+                aboutMovieResponse!!.budget = response.body()!!.budget
+                aboutMovieResponse!!.revenue = response.body()!!.revenue
+                aboutMovieResponse!!.genres = response.body()!!.genres
+                aboutMovieResponse!!.video = response.body()!!.video
+                obj = response.body()!!.video!!
                 obj.trailers = obj.trailers
-                if (aboutMovieResponse.releaseDate.length >= 5) binding.releaseDateTextView.text = aboutMovieResponse.releaseDate.substring(0, 4)
-                binding.runTimeTextView.text = (aboutMovieResponse.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse.runTimeOfMovie % 60 + "mins"
+                if (aboutMovieResponse!!.releaseDate.length >= 5) releaseDateTextView.text = aboutMovieResponse!!.releaseDate.substring(0, 4)
+                runTimeTextView.text = (aboutMovieResponse!!.runTimeOfMovie / 60).toString() + "hrs " + aboutMovieResponse!!.runTimeOfMovie % 60 + "mins"
                 val bundle = Bundle()
                 bundle.putBoolean("INFO", true)
-                bundle.putString("OVERVIEW", aboutMovieResponse.overview)
-                bundle.putString("RELEASE_DATE", aboutMovieResponse.releaseDate)
-                bundle.putLong("BUDGET", aboutMovieResponse.budget)
-                bundle.putLong("REVENUE", aboutMovieResponse.revenue)
+                bundle.putString("OVERVIEW", aboutMovieResponse!!.overview)
+                bundle.putString("RELEASE_DATE", aboutMovieResponse!!.releaseDate)
+                bundle.putLong("BUDGET", aboutMovieResponse!!.budget)
+                bundle.putLong("REVENUE", aboutMovieResponse!!.revenue)
                 bundle.putSerializable("TRAILER_THUMBNAILS", obj.trailers)
                 val obj1 = fragmentPager.function(0) as InfoAboutMovieFragment
                 obj1.setUIArguements(bundle)

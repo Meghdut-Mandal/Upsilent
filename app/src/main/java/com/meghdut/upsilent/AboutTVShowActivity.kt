@@ -20,8 +20,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.meghdut.upsilent.adapters.BannerViewPagerAdapter
 import com.meghdut.upsilent.adapters.TVShowFragmentPager
-import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
-import com.meghdut.upsilent.databinding.ActivityAboutTvshowBinding
 import com.meghdut.upsilent.fragments.explore.CastTVShowFragment
 import com.meghdut.upsilent.fragments.explore.InfoAboutTVShowFragment
 import com.meghdut.upsilent.models.Video
@@ -38,9 +36,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class AboutTVShowActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityAboutTvshowBinding
-
     private lateinit var mBannerViewPager: ViewPager
     private lateinit var bannerViewPagerAdapter: BannerViewPagerAdapter
     private lateinit var allBannerImageFullLinks: ArrayList<String>
@@ -56,17 +51,14 @@ class AboutTVShowActivity : AppCompatActivity() {
     lateinit var radioGroupTvShow: RadioGroup
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_about_tvshow)
-        binding = ActivityAboutTvshowBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(R.layout.activity_about_tvshow)
         title = ""
         val intent = intent
         val tvShow_id = intent.getIntExtra(IntentConstants.INTENT_KEY_TVSHOW_ID, 0)
         val posterPath = intent.getStringExtra(IntentConstants.INTENT_KEY_POSTER_PATH)
         val tvShowName = intent.getStringExtra(IntentConstants.INTENT_KEY_TVSHOW_NAME)
-//        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(binding.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
@@ -74,14 +66,14 @@ class AboutTVShowActivity : AppCompatActivity() {
         // primary sections of the activity.
         //mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         allBannerImageFullLinks = ArrayList()
-//        mBannerViewPager = findViewById(R.id.tvShowpager)
-//        radioGroupTvShow = findViewById(R.id.radioGroupTvShow)
+        mBannerViewPager = findViewById(R.id.tvShowpager)
+        radioGroupTvShow = findViewById(R.id.radioGroupTvShow)
         bannerViewPagerAdapter = BannerViewPagerAdapter(this, allBannerImageFullLinks)
-        binding.tvShowpager.adapter = bannerViewPagerAdapter
-        binding.tvShowpager.addOnPageChangeListener(object : OnPageChangeListener {
+        mBannerViewPager.adapter = bannerViewPagerAdapter
+        mBannerViewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 if (currentPage == 0 && doFirst) {
-                    val rb = binding.radioGroupTvShow.getChildAt(0) as RadioButton
+                    val rb = radioGroupTvShow.getChildAt(0) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
                     doFirst = false
                 }
@@ -89,15 +81,15 @@ class AboutTVShowActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
                 currentPage = if (position > currentPage) {
-                    val rb = binding.radioGroupTvShow.getChildAt(position) as RadioButton
+                    val rb = radioGroupTvShow.getChildAt(position) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
-                    val rbi = binding.radioGroupTvShow.getChildAt(currentPage) as RadioButton
+                    val rbi = radioGroupTvShow.getChildAt(currentPage) as RadioButton
                     rbi.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                     position
                 } else {
-                    val rb = binding.radioGroupTvShow.getChildAt(position) as RadioButton
+                    val rb = radioGroupTvShow.getChildAt(position) as RadioButton
                     rb.setButtonDrawable(R.drawable.ic_radio_button_checked)
-                    val rbi = binding.radioGroupTvShow.getChildAt(currentPage) as RadioButton
+                    val rbi = radioGroupTvShow.getChildAt(currentPage) as RadioButton
                     rbi.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
                     position
                 }
@@ -105,37 +97,37 @@ class AboutTVShowActivity : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-//        poster = findViewById<View>(R.id.posterWithBannerImageView) as ImageView
+        poster = findViewById<View>(R.id.posterWithBannerImageView) as ImageView
         Picasso.get().load(URLConstants.IMAGE_BASE_URL + posterPath).into(object : Target {
             override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom) {
                 Palette.from(bitmap).generate { palette: Palette? ->
                     val color = palette!!.getDarkMutedColor(Color.parseColor("#424242"))
                     //Palette.Swatch swatch1 = palette.getDarkVibrantSwatch();
-//                    val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
-                    binding.collapsingToolbar.setBackgroundColor(color)
-                    binding.collapsingToolbar.setContentScrimColor(color)
+                    val collapsingToolbarLayout = findViewById<View>(R.id.collapsingToolbar) as CollapsingToolbarLayout
+                    collapsingToolbarLayout.setBackgroundColor(color)
+                    collapsingToolbarLayout.setContentScrimColor(color)
                     tabLayout.setBackgroundColor(palette.getMutedColor(Color.parseColor("#424242")))
                 }
-                binding.posterWithBannerImageView.setImageBitmap(bitmap)
+                poster.setImageBitmap(bitmap)
             }
 
             override fun onBitmapFailed(e: Exception, errorDrawable: Drawable) {}
             override fun onPrepareLoad(placeHolderDrawable: Drawable) {}
         })
-//        tvShowNameTextView = findViewById(R.id.tvShowNameTextView)
-        binding.tvShowNameTextView.text = tvShowName
-//        genreTextView = findViewById(R.id.tvShowgenreTextView)
-//        tabLayout = findViewById(R.id.tabLayout)
-//        mViewPager = findViewById(R.id.container)
-        binding.tabLayout.addTab(binding.tabLayout.newTab())
-        binding.tabLayout.addTab(binding.tabLayout.newTab())
-        binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        tvShowNameTextView = findViewById(R.id.tvShowNameTextView)
+        tvShowNameTextView.text = tvShowName
+        genreTextView = findViewById(R.id.tvShowgenreTextView)
+        tabLayout = findViewById(R.id.tabLayout)
+        mViewPager = findViewById(R.id.container)
+        tabLayout.addTab(tabLayout.newTab())
+        tabLayout.addTab(tabLayout.newTab())
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         tvShowFragmentPager = TVShowFragmentPager(supportFragmentManager)
-        binding.container.adapter = tvShowFragmentPager
-        binding.tabLayout.setupWithViewPager(binding.container)
-        binding.tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+        mViewPager.adapter = tvShowFragmentPager
+        tabLayout.setupWithViewPager(mViewPager)
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.container.currentItem = tab.position
+                mViewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -155,7 +147,7 @@ class AboutTVShowActivity : AppCompatActivity() {
                         allBannerImageFullLinks.add(URLConstants.BANNER_BASE_URL + bannerImagesLinksList[i].bannerImageLink)
                         val radioButton = RadioButton(applicationContext)
                         radioButton.setButtonDrawable(R.drawable.ic_radio_button_unchecked)
-                        binding.radioGroupTvShow.addView(radioButton)
+                        radioGroupTvShow.addView(radioButton)
                     } else break
                 }
                 bannerViewPagerAdapter.refreshBannerUrls(allBannerImageFullLinks)
@@ -168,7 +160,7 @@ class AboutTVShowActivity : AppCompatActivity() {
             override fun onResponse(call: Call<AboutTVShowResponse>, response: Response<AboutTVShowResponse>) {
                 val genres = response.body()!!.genres
                 for (i in genres.indices) {
-                    if (i < genres.size - 1) binding.tvShowgenreTextView.append(genres[i].name + ", ") else binding.tvShowgenreTextView.append(genres[i].name)
+                    if (i < genres.size - 1) genreTextView.append(genres[i].name + ", ") else genreTextView.append(genres[i].name)
                 }
                 val aboutTVShowResponse = AboutTVShowResponse()
                 aboutTVShowResponse.overview = response.body()!!.overview
@@ -194,7 +186,7 @@ class AboutTVShowActivity : AppCompatActivity() {
                 Log.i("DUBAI", obj.trailers.toString())
                 bundle.putSerializable("TRAILER_THUMBNAILS", obj.trailers)
                 val obj = tvShowFragmentPager.function(0) as InfoAboutTVShowFragment?
-                obj?.setUIArguments(bundle)
+                obj?.setUIArguements(bundle)
             }
 
             override fun onFailure(call: Call<AboutTVShowResponse>, t: Throwable) {}

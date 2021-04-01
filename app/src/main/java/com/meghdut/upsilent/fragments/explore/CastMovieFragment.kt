@@ -15,26 +15,15 @@ import java.util.*
  * Created by Meghdut Mandal on 10/02/17.
  */
 class CastMovieFragment : Fragment() {
-//    private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapterMovieCast: RecyclerViewAdapterMovieCast
     private lateinit var movieCastMain: ArrayList<Cast>
-    private var _binding : FragmentCastMovieBinding ?= null
-    private val binding get() = _binding!!
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        val v = inflater.inflate(R.layout.fragment_cast_movie, container, false)
-//        recyclerView = v.findViewById(R.id.movieCastRecyclerview)
-//        return v
-//    }
+    private lateinit var binding : FragmentCastMovieBinding
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding= FragmentCastMovieBinding.inflate(inflater,container,false)
+        binding= FragmentCastMovieBinding.inflate(inflater,container,false)
         return binding.root
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding=null
     }
 
     fun setUIArguements(args: Bundle) {
@@ -42,10 +31,8 @@ class CastMovieFragment : Fragment() {
             movieCastMain = args.getSerializable("MOVIE_CAST") as ArrayList<Cast>
 
             recyclerViewAdapterMovieCast = RecyclerViewAdapterMovieCast(movieCastMain, requireActivity())
-           // recyclerView.adapter = recyclerViewAdapterMovieCast
             binding.movieCastRecyclerview.adapter = recyclerViewAdapterMovieCast
             val verticalManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            //recyclerView.layoutManager = verticalManager
             binding.movieCastRecyclerview.layoutManager = verticalManager
         }
     }

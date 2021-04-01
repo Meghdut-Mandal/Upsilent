@@ -9,6 +9,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.findNavController
 import com.androidisland.views.ArcBottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
@@ -23,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_home)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -33,13 +33,26 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         val fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         val fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
-//        val fabMovieSearch = findViewById<FloatingActionButton>(R.id.searchMovieFabButton)
-//        val fabTvShowSearch = findViewById<FloatingActionButton>(R.id.searchTvShowFabButton)
-//        val searchMovieTV = findViewById<TextView>(R.id.searchMovieTV)
-//        val searchShowTV = findViewById<TextView>(R.id.searchShowTV)
-//        val translucentV = findViewById<View>(R.id.translucentV)
 
-//        val navigationView = findViewById<ArcBottomNavigationView>(R.id.bottomNavigationView)
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+
+            when (it.itemId) {
+                R.id.exploreFragment -> {
+                    findNavController(R.id.navHostFragment).navigate(R.id.exploreFragment)
+                }
+                R.id.settingsFragment -> {
+                    findNavController(R.id.navHostFragment).navigate(R.id.settingsFragment)
+                }
+                R.id.driveFragment -> {
+                    findNavController(R.id.navHostFragment).navigate(R.id.driveFragment)
+                }
+
+                R.id.downloadFragment -> {
+                    findNavController(R.id.navHostFragment).navigate(R.id.downloadFragment)
+                }
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
         binding.bottomNavigationView.buttonClickListener = {
             isOpen = if (isOpen) {
                 binding.translucentV.visibility = View.GONE

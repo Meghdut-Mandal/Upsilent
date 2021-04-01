@@ -15,22 +15,13 @@ import java.util.*
  * Created by Meghdut Mandal on 18/03/17.
  */
 class CastTVShowFragment : Fragment() {
-    //private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapterTVShowCast: RecyclerViewAdapterTVShowCast
     private lateinit var tvShowCastMain: ArrayList<Cast>
-    //private lateinit var noCastTextView: TextView
 
     private var _binding : FragmentCastTvshowBinding?= null
     private val binding get() = _binding!!
 
-//    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//
-//        val v = inflater.inflate(R.layout.fragment_cast_tvshow, container, false)
-//        recyclerView = v.findViewById(R.id.tvShowCastRecyclerView)
-//        noCastTextView = v.findViewById(R.id.noCastTextView)
-//        tvShowCastMain = ArrayList()
-//        return v
-//    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding= FragmentCastTvshowBinding.inflate(inflater,container,false)
