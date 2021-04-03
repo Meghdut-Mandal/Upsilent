@@ -8,13 +8,13 @@ import com.meghdut.upsilent.models.GoogleDriveResponse
 import com.meghdut.upsilent.network.GoogleDriveApi
 import com.meghdut.upsilent.network.Query
 import com.meghdut.upsilent.network.URLConstants
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
-import java.net.URLEncoder
 
 
 sealed class CurrentState<out T> {
@@ -27,8 +27,15 @@ sealed class CurrentState<out T> {
 
 
 class DriveViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val client: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                setLevel(HttpLoggingInterceptor.Level.BODY)
+            }).build()
+
     private val retrofit = Retrofit.Builder()
             .baseUrl(URLConstants.DRIVE_ROOT)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     private val googleDriveApi = retrofit.create(GoogleDriveApi::class.java)
@@ -42,8 +49,18 @@ class DriveViewModel(application: Application) : AndroidViewModel(application) {
 
     fun explorePath(path: String) {
         if (path.isEmpty() && folderPath.isNotEmpty()) return
-        var mainPath = folderPath.joinToString("/") { android.net.Uri.encode(it, "utf-8") }
-        mainPath += "/${android.net.Uri.encode(path, "utf-8")}"
+        val mainPath = getRelativePath(path)
+        loadPath(mainPath) {
+            folderPath.add(path)
+        }
+    }
+
+    fun refreshList() {
+        val mainPath = folderPath.joinToString("/") { android.net.Uri.encode(it, "utf-8") }
+        loadPath(mainPath) { }
+    }
+
+    private fun loadPath(mainPath: String, onComplete: () -> Unit) {
         val query = Query()
         currentState.postValue(CurrentState.Loading)
         googleDriveApi.getData(mainPath, query).enqueue(object : Callback<GoogleDriveResponse> {
@@ -52,7 +69,7 @@ class DriveViewModel(application: Application) : AndroidViewModel(application) {
                     val driveResponse = response.body()!!
                     fileList.postValue(driveResponse.data.files)
                     currentState.postValue(CurrentState.Success(driveResponse))
-                    folderPath.add(path)
+                    onComplete()
                     filesCache[mainPath] = driveResponse
                 } else {
                     currentState.postValue(CurrentState.Error(Exception("Server error ${response.code()} ")))
@@ -75,6 +92,11 @@ class DriveViewModel(application: Application) : AndroidViewModel(application) {
         val driveResponse = filesCache[mainPath] ?: return
         fileList.postValue(driveResponse.data.files)
         currentState.postValue(CurrentState.Success(driveResponse))
+    }
+
+    fun getRelativePath(item: String): String {
+        val mainPath = folderPath.joinToString("/") { android.net.Uri.encode(it, "utf-8") }
+        return mainPath + "/${android.net.Uri.encode(item, "utf-8")}"
     }
 
 

@@ -2,7 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Copy Link" />
-    <item android:title="Open In Browser" />
-    <item android:title="Share" />
+    <item
+        android:id="@+id/file_copy_link"
+        android:title="Copy Link" />
+    <item
+        android:id="@+id/file_open_external"
+        android:title="Open In Browser" />
+    <item
+        android:id="@+id/file_share"
+        android:title="Share" />
 </menu>

@@ -12,5 +12,5 @@ object URLConstants {
     const val BANNER_BASE_URL = "http://image.tmdb.org/t/p/w500/"
     const val TRAILER_THUMBNAIL_IMAGE_URL = "http://img.youtube.com/vi/"
     const val YOUTUBE_VIDEO_PLAYER_API_KEY = "AIzaSyCyOw0_di6ROH5vObjBc-UYw0ZM3xWC0Zk"
-    const val DRIVE_ROOT = "https://kiit-drive.potassium.workers.dev"
+    const val DRIVE_ROOT = "https://kiit-drive.potassium.workers.dev/0:/"
 }
