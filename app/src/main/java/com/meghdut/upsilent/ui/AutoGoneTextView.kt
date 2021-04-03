@@ -24,7 +24,6 @@ class AutoGoneTextView : AppCompatTextView {
 
     override fun setText(text: CharSequence?, type: BufferType) {
         super.setText(text, type)
-
         isVisible = !text.isNullOrEmpty()
     }
 }
