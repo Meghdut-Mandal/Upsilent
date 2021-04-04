@@ -25,13 +25,16 @@ import com.meghdut.upsilent.databinding.ActivityAboutMovieBinding
 import com.meghdut.upsilent.databinding.ActivityAboutTvshowBinding
 import com.meghdut.upsilent.databinding.ActivityExoPlayerBinding
 
-class ExoPlayerActivity : AppCompatActivity() {
+const val MEDIA_URL = "media.url"
 
+class ExoPlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExoPlayerBinding
 
 
     //Media URL
-    private val videoURIMKV = Uri.parse("https://kiit-drive.potassium.workers.dev/0:/Breaking%20Bad%20Seasons%201%20to%205/Breaking%20Bad%20Season%202/%5BS02.E02%5D%20Breaking%20Bad%20-%20Grilled.mp4")
+    private lateinit var videoURIMKV: Uri
+
+    //    = Uri.parse("https://kiit-drive.potassium.workers.dev/0:/Breaking%20Bad%20Seasons%201%20to%205/Breaking%20Bad%20Season%202/%5BS02.E02%5D%20Breaking%20Bad%20-%20Grilled.mp4")
     private lateinit var buttonTrackSelector: Button
     private lateinit var buttonMenu: ImageView
     private lateinit var buttonSpeedControl: ImageView
@@ -39,14 +42,21 @@ class ExoPlayerActivity : AppCompatActivity() {
     private lateinit var textSpeed: TextView
     private var screenOrientationFlag = false
 
-    //ExoPlayer Declarations
     private var simpleExoPlayer: SimpleExoPlayer? = null
     private var playerView: PlayerView? = null
     private var defaultTrackSelector: DefaultTrackSelector? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_exo_player)
         binding = ActivityExoPlayerBinding.inflate(layoutInflater)
+        val uri = Uri.parse(intent.getStringExtra(MEDIA_URL)) ?: null
+        if (uri == null) {
+            println("No media URI ")
+            finish()
+            return
+        }
+        videoURIMKV = uri
+
+
         val view = binding.root
         setContentView(view)
 

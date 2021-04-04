@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.meghdut.upsilent.ExoPlayerActivity
+import com.meghdut.upsilent.MEDIA_URL
 import com.meghdut.upsilent.R
 import com.meghdut.upsilent.databinding.FileItemBinding
 import com.meghdut.upsilent.databinding.FragmentDrive2Binding
@@ -109,10 +111,17 @@ class DriveFragment : Fragment() {
             if (item.mimeType == "application/vnd.google-apps.folder") {
                 driveViewModel.explorePath(item.name)
             }
+            if ((item.mimeType.contains("video"))){
+                println("ITs a video ")
+                val intent=Intent(requireActivity(),ExoPlayerActivity::class.java)
+                intent.putExtra(MEDIA_URL,DRIVE_ROOT + driveViewModel.getRelativePath(item.name).substring(1))
+                startActivity(intent)
+            }
         }
         fileBinding.menuButton.setOnClickListener {
             openPopUp(item, it)
         }
+
     }
 
     private fun openPopUp(item: DriveFile, view: View) {
