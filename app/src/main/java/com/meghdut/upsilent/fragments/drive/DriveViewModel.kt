@@ -17,15 +17,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-sealed class CurrentState<out T> {
-
-    class Error(val exception: Exception) : CurrentState<Nothing>()
-    class Success<T>(val result: T) : CurrentState<T>()
-    object Loading : CurrentState<Nothing>()
-
-}
-
-
 class DriveViewModel(application: Application) : AndroidViewModel(application) {
 
     private val client: OkHttpClient = OkHttpClient.Builder()

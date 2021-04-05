@@ -111,10 +111,10 @@ class DriveFragment : Fragment() {
             if (item.mimeType == "application/vnd.google-apps.folder") {
                 driveViewModel.explorePath(item.name)
             }
-            if ((item.mimeType.contains("video"))){
+            if ((item.mimeType.contains("video"))) {
                 println("ITs a video ")
-                val intent=Intent(requireActivity(),ExoPlayerActivity::class.java)
-                intent.putExtra(MEDIA_URL,DRIVE_ROOT + driveViewModel.getRelativePath(item.name).substring(1))
+                val intent = Intent(requireActivity(), ExoPlayerActivity::class.java)
+                intent.putExtra(MEDIA_URL, DRIVE_ROOT + driveViewModel.getRelativePath(item.name).substring(1))
                 startActivity(intent)
             }
         }
@@ -158,18 +158,19 @@ class DriveFragment : Fragment() {
 
     }
 
-    private fun humanReadableByteCountSI(size: Long?): String {
-        if (size == null) return ""
-        var bytes = size
-        if (-1000 < bytes && bytes < 1000) {
-            return "$bytes B"
-        }
-        val ci = StringCharacterIterator("kMGTPE")
-        while (bytes <= -999950 || bytes >= 999950) {
-            bytes /= 1000
-            ci.next()
-        }
-        return java.lang.String.format(Locale.getDefault(), "%.1f %cB", bytes / 1000.0, ci.current())
-    }
 
+}
+
+fun humanReadableByteCountSI(size: Long?): String {
+    if (size == null) return ""
+    var bytes = size
+    if (-1000 < bytes && bytes < 1000) {
+        return "$bytes B"
+    }
+    val ci = StringCharacterIterator("kMGTPE")
+    while (bytes <= -999950 || bytes >= 999950) {
+        bytes /= 1000
+        ci.next()
+    }
+    return java.lang.String.format(Locale.getDefault(), "%.1f %cB", bytes / 1000.0, ci.current())
 }

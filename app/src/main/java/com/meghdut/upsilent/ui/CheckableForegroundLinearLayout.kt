@@ -32,12 +32,6 @@ class CheckableForegroundLinearLayout : ForegroundLinearLayout, Checkable {
         context, attrs, defStyleAttr
     )
 
-//    constructor(
-//        context: Context,
-//        attrs: AttributeSet?,
-//        @AttrRes defStyleAttr: Int,
-//        @StyleRes defStyleRes: Int
-//    ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     override fun isChecked(): Boolean = _isChecked
 

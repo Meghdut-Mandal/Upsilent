@@ -36,6 +36,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.res.ResourcesCompat
+import com.google.android.material.snackbar.Snackbar
 import com.meghdut.upsilent.R
 
 val Context.activity: Activity?

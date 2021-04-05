@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/driveFragment">
+    app:startDestination="@id/downloadFragment">
 
     <fragment
         android:id="@+id/exploreFragment"
@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_drive" />
     <fragment
         android:id="@+id/downloadFragment"
-        android:name="com.meghdut.upsilent.fragments.DownloadFragment"
+        android:name="com.meghdut.upsilent.fragments.downloads.DownloadFragment"
         android:label="fragment_download"
         tools:layout="@layout/fragment_download" />
 </navigation>
