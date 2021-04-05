@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.bottomsheets.setPeekHeight
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.snackbar.Snackbar
@@ -91,7 +93,8 @@ class DownloadFragment : Fragment() {
 
 
     private fun openPopUp() {
-        MaterialDialog(requireContext(), BottomSheet()).show {
+        MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+            val dialog=this
             customView(R.layout.layout_new_download)
             cornerRadius(16f)
             LayoutNewDownloadBinding.bind(getCustomView()).apply {
@@ -107,6 +110,7 @@ class DownloadFragment : Fragment() {
                         }
                         else -> {
                             downloadsViewModel.submitDownload(title, magnet)
+                            dialog.dismiss()
                         }
                     }
                 }

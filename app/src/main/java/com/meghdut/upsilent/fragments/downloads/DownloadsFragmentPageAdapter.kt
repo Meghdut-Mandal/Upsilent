@@ -8,7 +8,9 @@ import com.meghdut.upsilent.models.DownloadStatus
 
 class DownloadsFragmentPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    val downloadTypes = listOf(DownloadStatus.NOT_ASSIGNED, DownloadStatus.ONGOING, DownloadStatus.ERROR)
+    val downloadTypes = listOf(DownloadStatus.NOT_ASSIGNED + " " + DownloadStatus.ONGOING + " " + DownloadStatus.STARTED,
+            DownloadStatus.COMPLETED,
+            DownloadStatus.ERROR)
 
     override fun getItemCount() = 3
 

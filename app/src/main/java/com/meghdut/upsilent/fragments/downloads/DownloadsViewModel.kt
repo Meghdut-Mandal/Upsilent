@@ -26,6 +26,7 @@ class DownloadsViewModel(application: Application) : AndroidViewModel(applicatio
                 val list = snapshot.children.mapNotNull { it.getValue(UpsilentServer::class.java) }
                 serversLiveData.postValue(CurrentState.Success(list))
             }
+
             override fun onCancelled(error: DatabaseError) {
                 serversLiveData.postValue(CurrentState.Error(error.toException()))
             }
@@ -50,6 +51,7 @@ class DownloadsViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     fun submitDownload(title: String, magnet: String) {
+        if (serverId.isBlank()) return
         val download = Download(System.currentTimeMillis().toString(), title, magnet, null, DownloadStatus.NOT_ASSIGNED)
         database.getReference("downloads/$serverId/${download.id}").setValue(download)
     }

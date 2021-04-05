@@ -34,11 +34,11 @@ class DownloadListFragment : Fragment() {
         listBinding.downloadList.layoutManager = LinearLayoutManager(context)
         listBinding.downloadList.adapter = downloadAdapter
         arguments?.takeIf { it.containsKey(DOWNLOAD_TYPE) }?.apply {
-            val dnwldType = getString(DOWNLOAD_TYPE)
+            val dnwldType = getString(DOWNLOAD_TYPE) ?: ""
             downloadsViewModel.downloadData.observe(viewLifecycleOwner) { downloadState ->
                 when {
                     downloadState is CurrentState.Success -> {
-                        downloadAdapter.submitList(downloadState.result.filter { it.status == dnwldType })
+                        downloadAdapter.submitList(downloadState.result.filter { dnwldType.contains(it.status) })
                     }
                     downloadState is CurrentState.Error -> {
                         println("Error!! ")
@@ -52,8 +52,10 @@ class DownloadListFragment : Fragment() {
 
     private fun itemHandler(download: Download, layoutDownloadBinding: LayoutDownloadBinding) {
         layoutDownloadBinding.downloadTitle.text = download.title
-        val sizeStatus="Downloaded ${humanReadableByteCountSI(download.downloadProgress?.downloaded)} "
-        val timeStatus="Elapsed Time ${download.downloadProgress?.elapsedTime}"
+        val sizeStatus = "Downloaded ${humanReadableByteCountSI(download.downloadProgress?.downloaded)} "
+        val timeStatus = "Elapsed Time ${download.downloadProgress?.elapsedTime}"
+        layoutDownloadBinding.downloadTime.text = timeStatus
+        layoutDownloadBinding.downloadProgress.text = sizeStatus
     }
 
 

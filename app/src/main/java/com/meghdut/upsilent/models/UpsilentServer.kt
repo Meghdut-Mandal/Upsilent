@@ -1,12 +1,16 @@
 package com.meghdut.upsilent.models
 
+import com.meghdut.upsilent.utils.Identifiable
+
 data class UpsilentServer(
         val serverId: String,
         var lastCheckedTime: Long,
         val isPrivate: Boolean,
         val sysInfo: SysInfo
-) {
+): Identifiable {
     constructor() : this("", 0, false, SysInfo())
+    override val id: String
+        get() = serverId
 }
 
 data class SysInfo(

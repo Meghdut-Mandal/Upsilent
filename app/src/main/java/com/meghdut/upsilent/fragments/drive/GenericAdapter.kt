@@ -7,10 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.meghdut.upsilent.utils.Identifiable
 
 open class GenericAdapter<T, B : ViewBinding>(
         val bindingProvider: (LayoutInflater, ViewGroup, Boolean) -> B,
         val itemHandler: (T, B) -> Unit) : ListAdapter<T, GenericAdapter.GenericViewModel<T, B>>(GenericCallBack<T>()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewModel<T, B> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = bindingProvider(layoutInflater, parent, false)
@@ -26,7 +28,10 @@ open class GenericAdapter<T, B : ViewBinding>(
 
     private class GenericCallBack<T> : DiffUtil.ItemCallback<T>() {
         override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-            return oldItem == newItem
+            return if (oldItem is Identifiable && newItem is Identifiable){
+                oldItem.id==newItem.id
+            }else
+                oldItem == newItem
         }
 
         @SuppressLint("DiffUtilEquals")
