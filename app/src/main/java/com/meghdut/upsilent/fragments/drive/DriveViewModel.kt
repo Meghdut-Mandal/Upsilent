@@ -75,7 +75,7 @@ class DriveViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun goBack() {
-        if (folderPath.size == 1) return
+        if (folderPath.size <= 1) return
         val last = folderPath.lastIndex
         folderPath.removeAt(last)
         var mainPath = folderPath.joinToString("/") { android.net.Uri.encode(it, "utf-8") }
